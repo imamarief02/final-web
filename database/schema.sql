@@ -1,0 +1,88 @@
+-- 0. PASTIKAN SCHEMA PUBLIC AKTIF
+CREATE SCHEMA IF NOT EXISTS public;
+SET search_path TO public;
+
+-- 1. DEFINISI TIPE ENUM
+DO $$ BEGIN
+    CREATE TYPE peran_pengguna AS ENUM ('admin', 'teacher', 'student');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+DO $$ BEGIN
+    CREATE TYPE status_guru_tipe AS ENUM ('pending', 'approved', 'rejected');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+
+-- 2. TABEL PENGGUNA
+CREATE TABLE IF NOT EXISTS pengguna (
+    id SERIAL PRIMARY KEY,
+    nama_pengguna VARCHAR(100) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    kata_sandi VARCHAR(255) NOT NULL,
+    peran peran_pengguna NOT NULL DEFAULT 'student',
+    status_guru status_guru_tipe DEFAULT NULL,
+    disetujui_pada TIMESTAMP WITH TIME ZONE DEFAULT NULL,
+    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3. TABEL KATEGORI
+CREATE TABLE IF NOT EXISTS kategori (
+    id SERIAL PRIMARY KEY,
+    nama_kategori VARCHAR(100) NOT NULL UNIQUE,
+    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 4. TABEL KURSUS
+CREATE TABLE IF NOT EXISTS kursus (
+    id SERIAL PRIMARY KEY,
+    judul VARCHAR(255) NOT NULL,
+    deskripsi TEXT NOT NULL,
+    id_kategori INT NOT NULL REFERENCES kategori(id) ON DELETE RESTRICT,
+    id_guru INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
+    tanggal_mulai DATE DEFAULT NULL,
+    tanggal_selesai DATE DEFAULT NULL,
+    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5. TABEL MATERI KURSUS
+CREATE TABLE IF NOT EXISTS materi_kursus (
+    id SERIAL PRIMARY KEY,
+    id_kursus INT NOT NULL REFERENCES kursus(id) ON DELETE CASCADE,
+    judul_materi VARCHAR(255) NOT NULL,
+    isi_materi TEXT NOT NULL,
+    urutan_materi INT NOT NULL,
+    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (id_kursus, urutan_materi)
+);
+
+-- 6. TABEL PENDAFTARAN KURSUS
+CREATE TABLE IF NOT EXISTS pendaftaran_kursus (
+    id SERIAL PRIMARY KEY,
+    id_siswa INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
+    id_kursus INT NOT NULL REFERENCES kursus(id) ON DELETE CASCADE,
+    terdaftar_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (id_siswa, id_kursus)
+);
+
+-- 7. TABEL PROGRES MATERI
+CREATE TABLE IF NOT EXISTS progres_materi (
+    id SERIAL PRIMARY KEY,
+    id_siswa INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
+    id_materi INT NOT NULL REFERENCES materi_kursus(id) ON DELETE CASCADE,
+    selesai_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (id_siswa, id_materi)
+);
+
+-- 8. TABEL KOMENTAR
+CREATE TABLE IF NOT EXISTS komentar (
+    id SERIAL PRIMARY KEY,
+    id_materi INT NOT NULL REFERENCES materi_kursus(id) ON DELETE CASCADE,
+    id_pengguna INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
+    isi_komentar TEXT NOT NULL,
+    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
