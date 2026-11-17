@@ -1,88 +1,99 @@
--- 0. PASTIKAN SCHEMA PUBLIC AKTIF
-CREATE SCHEMA IF NOT EXISTS public;
-SET search_path TO public;
+CREATE TYPE user_role      AS ENUM ('admin','teacher','student');
+CREATE TYPE teacher_state  AS ENUM ('pending','approved','rejected');
+CREATE TYPE course_level   AS ENUM ('pemula','menengah','lanjutan');
+CREATE TYPE course_status  AS ENUM ('draft','published');
 
--- 1. DEFINISI TIPE ENUM
-DO $$ BEGIN
-    CREATE TYPE peran_pengguna AS ENUM ('admin', 'teacher', 'student');
-EXCEPTION
-    WHEN duplicate_object THEN null;
-END $$;
-
-DO $$ BEGIN
-    CREATE TYPE status_guru_tipe AS ENUM ('pending', 'approved', 'rejected');
-EXCEPTION
-    WHEN duplicate_object THEN null;
-END $$;
-
--- 2. TABEL PENGGUNA
-CREATE TABLE IF NOT EXISTS pengguna (
-    id SERIAL PRIMARY KEY,
-    nama_pengguna VARCHAR(100) NOT NULL UNIQUE,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    kata_sandi VARCHAR(255) NOT NULL,
-    peran peran_pengguna NOT NULL DEFAULT 'student',
-    status_guru status_guru_tipe DEFAULT NULL,
-    disetujui_pada TIMESTAMP WITH TIME ZONE DEFAULT NULL,
-    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE users (
+  id             SERIAL PRIMARY KEY,
+  name           VARCHAR(100) NOT NULL,
+  email          VARCHAR(150) NOT NULL UNIQUE,
+  password_hash  TEXT NOT NULL,
+  role           user_role NOT NULL DEFAULT 'student',
+  teacher_status teacher_state,
+  bio            TEXT,
+  avatar_url     TEXT,
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT chk_teacher_status CHECK (
+    (role = 'teacher' AND teacher_status IS NOT NULL) OR
+    (role <> 'teacher' AND teacher_status IS NULL))
 );
 
--- 3. TABEL KATEGORI
-CREATE TABLE IF NOT EXISTS kategori (
-    id SERIAL PRIMARY KEY,
-    nama_kategori VARCHAR(100) NOT NULL UNIQUE,
-    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE sessions (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id     INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  token_hash  TEXT NOT NULL UNIQUE,
+  expires_at  TIMESTAMPTZ NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- 4. TABEL KURSUS
-CREATE TABLE IF NOT EXISTS kursus (
-    id SERIAL PRIMARY KEY,
-    judul VARCHAR(255) NOT NULL,
-    deskripsi TEXT NOT NULL,
-    id_kategori INT NOT NULL REFERENCES kategori(id) ON DELETE RESTRICT,
-    id_guru INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
-    tanggal_mulai DATE DEFAULT NULL,
-    tanggal_selesai DATE DEFAULT NULL,
-    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE categories (
+  id          SERIAL PRIMARY KEY,
+  name        VARCHAR(80)  NOT NULL UNIQUE,
+  slug        VARCHAR(100) NOT NULL UNIQUE,
+  description TEXT
 );
 
--- 5. TABEL MATERI KURSUS
-CREATE TABLE IF NOT EXISTS materi_kursus (
-    id SERIAL PRIMARY KEY,
-    id_kursus INT NOT NULL REFERENCES kursus(id) ON DELETE CASCADE,
-    judul_materi VARCHAR(255) NOT NULL,
-    isi_materi TEXT NOT NULL,
-    urutan_materi INT NOT NULL,
-    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    diperbarui_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (id_kursus, urutan_materi)
+CREATE TABLE courses (
+  id            SERIAL PRIMARY KEY,
+  teacher_id    INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  category_id   INT NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+  title         VARCHAR(150) NOT NULL,
+  slug          VARCHAR(180) NOT NULL UNIQUE,
+  description   TEXT NOT NULL,
+  thumbnail_url TEXT,
+  level         course_level  NOT NULL DEFAULT 'pemula',
+  status        course_status NOT NULL DEFAULT 'draft',
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- 6. TABEL PENDAFTARAN KURSUS
-CREATE TABLE IF NOT EXISTS pendaftaran_kursus (
-    id SERIAL PRIMARY KEY,
-    id_siswa INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
-    id_kursus INT NOT NULL REFERENCES kursus(id) ON DELETE CASCADE,
-    terdaftar_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (id_siswa, id_kursus)
+CREATE TABLE materials (
+  id           SERIAL PRIMARY KEY,
+  course_id    INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  title        VARCHAR(150) NOT NULL,
+  content      TEXT NOT NULL,
+  order_number INT NOT NULL CHECK (order_number > 0),
+  created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (course_id, order_number)
 );
 
--- 7. TABEL PROGRES MATERI
-CREATE TABLE IF NOT EXISTS progres_materi (
-    id SERIAL PRIMARY KEY,
-    id_siswa INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
-    id_materi INT NOT NULL REFERENCES materi_kursus(id) ON DELETE CASCADE,
-    selesai_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (id_siswa, id_materi)
+CREATE TABLE enrollments (
+  id           SERIAL PRIMARY KEY,
+  student_id   INT NOT NULL REFERENCES users(id)   ON DELETE CASCADE,
+  course_id    INT NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+  enrolled_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  completed_at TIMESTAMPTZ,
+  UNIQUE (student_id, course_id)
 );
 
--- 8. TABEL KOMENTAR
-CREATE TABLE IF NOT EXISTS komentar (
-    id SERIAL PRIMARY KEY,
-    id_materi INT NOT NULL REFERENCES materi_kursus(id) ON DELETE CASCADE,
-    id_pengguna INT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE,
-    isi_komentar TEXT NOT NULL,
-    dibuat_pada TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+CREATE TABLE material_progress (
+  id            SERIAL PRIMARY KEY,
+  enrollment_id INT NOT NULL REFERENCES enrollments(id) ON DELETE CASCADE,
+  material_id   INT NOT NULL REFERENCES materials(id)   ON DELETE CASCADE,
+  is_completed  BOOLEAN NOT NULL DEFAULT FALSE,
+  completed_at  TIMESTAMPTZ,
+  UNIQUE (enrollment_id, material_id)
 );
+
+CREATE TABLE discussions (
+  id          SERIAL PRIMARY KEY,
+  material_id INT NOT NULL REFERENCES materials(id) ON DELETE CASCADE,
+  user_id     INT NOT NULL REFERENCES users(id)     ON DELETE CASCADE,
+  parent_id   INT REFERENCES discussions(id) ON DELETE CASCADE,
+  content     TEXT NOT NULL,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE certificates (
+  id               SERIAL PRIMARY KEY,
+  enrollment_id    INT NOT NULL UNIQUE REFERENCES enrollments(id) ON DELETE CASCADE,
+  certificate_code VARCHAR(30) NOT NULL UNIQUE,
+  issued_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_courses_category ON courses(category_id);
+CREATE INDEX idx_courses_status   ON courses(status);
+CREATE INDEX idx_enroll_student   ON enrollments(student_id);
+CREATE INDEX idx_disc_material    ON discussions(material_id);
