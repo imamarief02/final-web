@@ -2,11 +2,13 @@
   "name": "kursusdeh",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:init": "node src/scripts/init-db.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
