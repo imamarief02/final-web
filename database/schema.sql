@@ -1,3 +1,21 @@
+-- Skema Basis Data KursusDeh (PostgreSQL 3NF - 9 Tabel Utama)
+-- Acuan: PRD.md Bagian 5.1
+
+DROP TABLE IF EXISTS certificates CASCADE;
+DROP TABLE IF EXISTS discussions CASCADE;
+DROP TABLE IF EXISTS material_progress CASCADE;
+DROP TABLE IF EXISTS enrollments CASCADE;
+DROP TABLE IF EXISTS materials CASCADE;
+DROP TABLE IF EXISTS courses CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS sessions CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+DROP TYPE IF EXISTS course_status CASCADE;
+DROP TYPE IF EXISTS course_level CASCADE;
+DROP TYPE IF EXISTS teacher_state CASCADE;
+DROP TYPE IF EXISTS user_role CASCADE;
+
 CREATE TYPE user_role      AS ENUM ('admin','teacher','student');
 CREATE TYPE teacher_state  AS ENUM ('pending','approved','rejected');
 CREATE TYPE course_level   AS ENUM ('pemula','menengah','lanjutan');
@@ -92,7 +110,7 @@ CREATE TABLE certificates (
   issued_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Indexes
+-- Indeks Performa
 CREATE INDEX idx_courses_category ON courses(category_id);
 CREATE INDEX idx_courses_status   ON courses(status);
 CREATE INDEX idx_enroll_student   ON enrollments(student_id);
