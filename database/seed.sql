@@ -1,22 +1,24 @@
--- Seed Data KursusDeh
--- Acuan: PRD.md (Password untuk seluruh akun bawaan: password123)
-
 -- 1. Pengguna (Users)
 -- Hash password123: $2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe
 INSERT INTO users (id, name, email, password_hash, role, teacher_status, bio, avatar_url)
 VALUES 
   (1, 'Admin Pusat KursusDeh', 'admin@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'admin', NULL, 'Administrator Sistem KursusDeh', NULL),
-  (2, 'Budi Santoso, S.Kom', 'teacher@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL),
-  (3, 'Siti Rahmawati', 'calonguru@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL),
-  (4, 'Andi Pratama', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
-  (5, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL)
+  (2, 'Budi Santoso, S.Kom', 'budi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL),
+  (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL),
+  (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
+  (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL),
+  (6, 'Budi Santoso (Akun Guru)', 'teacher@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman.', NULL),
+  (7, 'Siti Rahmawati (Akun Calon)', 'calonguru@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design.', NULL),
+  (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
+  (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL)
 ON CONFLICT (id) DO UPDATE SET 
   name = EXCLUDED.name,
+  email = EXCLUDED.email,
   password_hash = EXCLUDED.password_hash,
   role = EXCLUDED.role,
   teacher_status = EXCLUDED.teacher_status;
 
-ALTER SEQUENCE users_id_seq RESTART WITH 6;
+ALTER SEQUENCE users_id_seq RESTART WITH 10;
 
 -- 2. Kategori Kursus (Categories)
 INSERT INTO categories (id, name, slug, description)
