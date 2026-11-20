@@ -7,8 +7,6 @@ VALUES
   (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL),
   (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
   (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL),
-  (6, 'Budi Santoso (Akun Guru)', 'teacher@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman.', NULL),
-  (7, 'Siti Rahmawati (Akun Calon)', 'calonguru@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design.', NULL),
   (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
   (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL)
 ON CONFLICT (id) DO UPDATE SET 
