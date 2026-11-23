@@ -7,7 +7,7 @@ export async function GET(request, { params }) {
 
     const result = await query(
       `SELECT cert.id, cert.certificate_code, cert.issued_at,
-              u.name AS student_name, u.email AS student_email,
+              u.name AS student_name,
               c.title AS course_title, c.slug AS course_slug,
               cat.name AS category_name,
               t.name AS teacher_name

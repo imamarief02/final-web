@@ -25,7 +25,7 @@ export async function POST(request, { params }) {
 
     // Ambil data kursus dan enrollment
     const courseRes = await query(
-      `SELECT c.id, e.id AS enrollment_id
+      `SELECT c.id, c.status, e.id AS enrollment_id
        FROM courses c
        JOIN enrollments e ON c.id = e.course_id
        WHERE c.slug = $1 AND e.student_id = $2`,
@@ -39,7 +39,14 @@ export async function POST(request, { params }) {
       );
     }
 
-    const { id: courseId, enrollment_id: enrollmentId } = courseRes.rows[0];
+    const { id: courseId, status: courseStatus, enrollment_id: enrollmentId } = courseRes.rows[0];
+
+    if (courseStatus !== 'published') {
+      return NextResponse.json(
+        { error: 'Kursus ini belum dipublikasikan.' },
+        { status: 403 }
+      );
+    }
 
     // Ambil material id
     const materialRes = await query(
@@ -55,6 +62,25 @@ export async function POST(request, { params }) {
     }
 
     const materialId = materialRes.rows[0].id;
+
+    // Aturan Bisnis: Urutan belajar bertahap (materi sebelumnya harus diselesaikan terlebih dahulu)
+    if (orderNum > 1) {
+      const missingPrevRes = await query(
+        `SELECT COUNT(m.id)::int AS missing_count
+         FROM materials m
+         LEFT JOIN material_progress mp 
+           ON m.id = mp.material_id AND mp.enrollment_id = $1 AND mp.is_completed = TRUE
+         WHERE m.course_id = $2 AND m.order_number < $3 AND mp.id IS NULL`,
+        [enrollmentId, courseId, orderNum]
+      );
+
+      if (missingPrevRes.rows[0].missing_count > 0) {
+        return NextResponse.json(
+          { error: 'Harap selesaikan materi-materi sebelumnya terlebih dahulu sebelum menandai materi ini selesai.' },
+          { status: 400 }
+        );
+      }
+    }
 
     // Catat / Perbarui progres materi (UC-08)
     await query(

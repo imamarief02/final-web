@@ -17,7 +17,7 @@ export async function GET(request, { params }) {
 
     // Ambil data kursus
     const courseRes = await query(
-      `SELECT id, teacher_id, title, slug FROM courses WHERE slug = $1`,
+      `SELECT id, teacher_id, title, slug, status FROM courses WHERE slug = $1`,
       [courseSlug]
     );
 
@@ -29,6 +29,16 @@ export async function GET(request, { params }) {
     }
 
     const course = courseRes.rows[0];
+
+    // Jika status kursus bukan published, hanya admin dan guru pemilik yang diizinkan mengakses
+    if (course.status !== 'published') {
+      if (user.role !== 'admin' && (user.role !== 'teacher' || course.teacher_id !== user.id)) {
+        return NextResponse.json(
+          { error: 'Kursus ini belum dipublikasikan atau sedang ditinjau.' },
+          { status: 403 }
+        );
+      }
+    }
 
     // Otorisasi hak akses (PRD BR-09)
     let enrollment = null;

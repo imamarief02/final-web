@@ -37,7 +37,7 @@ export default function CertificatePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-xl mx-auto px-4 py-24 text-center text-slate-500">
           Memverifikasi data sertifikat...
@@ -49,10 +49,10 @@ export default function CertificatePage() {
 
   if (error || !cert) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-md mx-auto px-4 py-24 text-center space-y-4">
-          <div className="w-14 h-14 rounded-full bg-red-100 text-[#B91C1C] flex items-center justify-center mx-auto">
+          <div className="w-14 h-14 rounded-full bg-red-100 text-danger flex items-center justify-center mx-auto">
             <Award className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-bold text-slate-800">Sertifikat Tidak Valid</h2>
@@ -67,7 +67,7 @@ export default function CertificatePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <div className="print:hidden">
         <Navbar />
       </div>
@@ -77,7 +77,7 @@ export default function CertificatePage() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8 print:hidden">
           <Link
             href="/dashboard/student"
-            className="inline-flex items-center gap-2 text-sm font-bold text-[#0F766E] hover:underline"
+            className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Kembali ke Dashboard Siswa</span>
@@ -99,19 +99,19 @@ export default function CertificatePage() {
           <div className="relative z-10 text-center space-y-8">
             {/* Header Platform */}
             <div className="flex items-center justify-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-[#0F766E] flex items-center justify-center text-white shadow-md">
-                <BookOpen className="w-7 h-7 text-[#F59E0B]" />
+              <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white shadow-md">
+                <BookOpen className="w-7 h-7 text-accent" />
               </div>
-              <span className="text-3xl font-extrabold tracking-tight text-[#0F766E]">
-                Kursus<span className="text-[#F59E0B]">Deh</span>
+              <span className="text-3xl font-extrabold tracking-tight text-primary">
+                Kursus<span className="text-accent">Deh</span>
               </span>
             </div>
 
             <div className="space-y-1">
-              <div className="text-xs font-bold uppercase tracking-widest text-[#F59E0B]">
+              <div className="text-xs font-bold uppercase tracking-widest text-accent">
                 Sertifikat Kelulusan Resmi
               </div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
                 Certificate of Completion
               </h1>
             </div>
@@ -122,7 +122,7 @@ export default function CertificatePage() {
 
             {/* Nama Siswa */}
             <div className="py-2">
-              <div className="text-3xl sm:text-5xl font-extrabold text-[#0F766E] tracking-tight underline decoration-amber-400 decoration-2 underline-offset-8">
+              <div className="text-3xl sm:text-5xl font-extrabold text-primary tracking-tight underline decoration-amber-400 decoration-2 underline-offset-8">
                 {cert.student_name}
               </div>
             </div>
@@ -153,7 +153,7 @@ export default function CertificatePage() {
               </div>
 
               <div className="space-y-1 text-center sm:text-right">
-                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#15803D]">
+                <div className="inline-flex items-center gap-1.5 text-xs font-bold text-success">
                   <ShieldCheck className="w-4 h-4" />
                   <span>Terverifikasi Secara Digital</span>
                 </div>

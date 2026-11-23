@@ -24,9 +24,17 @@ export async function POST(request, { params }) {
       );
     }
 
-    // Ambil materi id
+    const trimmedContent = content.trim();
+    if (trimmedContent.length > 1000) {
+      return NextResponse.json(
+        { error: 'Pesan diskusi maksimal 1000 karakter.' },
+        { status: 400 }
+      );
+    }
+
+    // Ambil materi id dan info kursus
     const materialRes = await query(
-      `SELECT m.id, m.course_id
+      `SELECT m.id, m.course_id, c.teacher_id, c.status
        FROM materials m
        JOIN courses c ON m.course_id = c.id
        WHERE c.slug = $1 AND m.order_number = $2`,
@@ -40,7 +48,28 @@ export async function POST(request, { params }) {
       );
     }
 
-    const materialId = materialRes.rows[0].id;
+    const material = materialRes.rows[0];
+    const materialId = material.id;
+    const courseId = material.course_id;
+
+    // Validasi otorisasi hak akses ke forum diskusi kursus
+    if (user.role === 'student') {
+      const enrollRes = await query(
+        `SELECT id FROM enrollments WHERE student_id = $1 AND course_id = $2`,
+        [user.id, courseId]
+      );
+      if (enrollRes.rows.length === 0 || material.status !== 'published') {
+        return NextResponse.json(
+          { error: 'Anda harus terdaftar pada kursus ini untuk berpartisipasi dalam diskusi.' },
+          { status: 403 }
+        );
+      }
+    } else if (user.role === 'teacher' && material.teacher_id !== user.id) {
+      return NextResponse.json(
+        { error: 'Pengajar hanya dapat berdiskusi pada kursus miliknya sendiri.' },
+        { status: 403 }
+      );
+    }
 
     // Jika membalas diskusi (parent), pastikan parent_id valid
     if (parentId) {
@@ -60,7 +89,7 @@ export async function POST(request, { params }) {
       `INSERT INTO discussions (material_id, user_id, parent_id, content)
        VALUES ($1, $2, $3, $4)
        RETURNING id, material_id, user_id, parent_id, content, created_at`,
-      [materialId, user.id, parentId || null, content.trim()]
+      [materialId, user.id, parentId || null, trimmedContent]
     );
 
     const newDisc = insertRes.rows[0];
