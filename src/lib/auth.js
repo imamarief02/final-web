@@ -26,6 +26,9 @@ export async function createSession(userId) {
   const tokenHash = hashToken(rawToken);
   const expiresAt = new Date(Date.now() + SESSION_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
 
+  // Bersihkan sesi yang sudah kedaluwarsa untuk menjaga efisiensi database
+  await query(`DELETE FROM sessions WHERE expires_at <= NOW() OR (user_id = $1 AND expires_at <= NOW())`, [userId]);
+
   // Simpan ke database
   await query(
     `INSERT INTO sessions (user_id, token_hash, expires_at)

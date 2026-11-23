@@ -1,6 +1,10 @@
 import { Pool } from 'pg';
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:imam173@localhost:5432/kursusdeh';
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error('Variabel lingkungan DATABASE_URL belum diatur. Harap definisikan DATABASE_URL pada berkas .env.local.');
+}
 
 // Inisialisasi pool PostgreSQL
 let pool;

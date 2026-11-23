@@ -13,14 +13,37 @@ export async function POST(request) {
       );
     }
 
-    if (password.length < 6) {
+    const trimmedName = name.trim();
+    if (trimmedName.length < 2 || trimmedName.length > 100) {
       return NextResponse.json(
-        { error: 'Kata sandi minimal 6 karakter.' },
+        { error: 'Nama harus memiliki panjang antara 2 hingga 100 karakter.' },
         { status: 400 }
       );
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(normalizedEmail) || normalizedEmail.length > 150) {
+      return NextResponse.json(
+        { error: 'Format email tidak valid atau terlalu panjang.' },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 6 || password.length > 100) {
+      return NextResponse.json(
+        { error: 'Kata sandi harus antara 6 hingga 100 karakter.' },
+        { status: 400 }
+      );
+    }
+
+    const trimmedBio = typeof bio === 'string' ? bio.trim() : '';
+    if (trimmedBio.length > 500) {
+      return NextResponse.json(
+        { error: 'Bio maksimal 500 karakter.' },
+        { status: 400 }
+      );
+    }
 
     // Pastikan peran hanya student atau teacher (admin hanya melalui seed)
     if (!['student', 'teacher'].includes(role)) {
