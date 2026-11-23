@@ -40,7 +40,7 @@ export default function CourseCard({ course }) {
       </div>
 
       <div className="p-6 flex flex-col flex-1">
-        <h3 className="font-bold text-xl text-[#0F172A] group-hover:text-[#0F766E] transition-colors line-clamp-2 mb-2">
+        <h3 className="font-bold text-xl text-text-main group-hover:text-primary transition-colors line-clamp-2 mb-2">
           {title}
         </h3>
         
@@ -49,7 +49,7 @@ export default function CourseCard({ course }) {
         </p>
 
         <div className="flex items-center gap-2 mb-4 text-xs text-slate-500">
-          <div className="w-6 h-6 rounded-full bg-teal-100 text-[#0F766E] font-bold flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full bg-teal-100 text-primary font-bold flex items-center justify-center">
             {teacher_name ? teacher_name.charAt(0) : 'G'}
           </div>
           <span className="font-medium text-slate-700 truncate">{teacher_name || 'Pengajar KursusDeh'}</span>
@@ -71,7 +71,7 @@ export default function CourseCard({ course }) {
 
           <Link
             href={`/courses/${slug}`}
-            className="inline-flex items-center gap-1 text-sm font-bold text-[#0F766E] group-hover:text-[#134E4A] hover:underline"
+            className="inline-flex items-center gap-1 text-sm font-bold text-primary group-hover:text-primary-dark hover:underline"
           >
             <span>Detail</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

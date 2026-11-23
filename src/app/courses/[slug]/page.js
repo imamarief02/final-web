@@ -91,7 +91,7 @@ export default function CourseDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-7xl mx-auto px-4 py-20 text-center text-slate-500">
           Memuat detail kursus...
@@ -103,10 +103,10 @@ export default function CourseDetailPage() {
 
   if (!courseData || !courseData.course) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-xl mx-auto px-4 py-24 text-center space-y-4">
-          <AlertCircle className="w-12 h-12 text-[#B91C1C] mx-auto" />
+          <AlertCircle className="w-12 h-12 text-danger mx-auto" />
           <h2 className="text-2xl font-bold text-slate-800">Kursus Tidak Ditemukan</h2>
           <p className="text-slate-600 text-sm">
             Kursus yang Anda cari mungkin telah dihapus atau belum dipublikasikan.
@@ -125,12 +125,12 @@ export default function CourseDetailPage() {
   const isTeacherOwner = currentUser && currentUser.role === 'teacher' && course.teacher_id === currentUser.id;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
 
       <main className="flex-1">
         {/* Course Hero Banner */}
-        <section className="bg-gradient-to-b from-teal-900 to-[#134E4A] text-white py-12 sm:py-16">
+        <section className="bg-linear-to-b from-teal-900 to-primary-dark text-white py-12 sm:py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <Link
               href="/courses"
@@ -162,7 +162,7 @@ export default function CourseDetailPage() {
                 {/* Course Meta Info */}
                 <div className="flex flex-wrap items-center gap-6 pt-2 text-sm text-teal-100">
                   <div className="flex items-center gap-2">
-                    <Users className="w-5 h-5 text-[#F59E0B]" />
+                    <Users className="w-5 h-5 text-accent" />
                     <span>{course.student_count || 0} Siswa Terdaftar</span>
                   </div>
                   <div className="flex items-center gap-2">
@@ -185,7 +185,7 @@ export default function CourseDetailPage() {
 
               {/* Action Card (Sisi Kanan) */}
               <div className="lg:col-span-4">
-                <div className="bg-white text-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 space-y-6">
+                <div className="bg-white text-slate-800 rounded-2xl p-6 sm:p-8 shadow-md border border-slate-300/80 space-y-6">
                   {course.thumbnail_url && (
                     <div className="aspect-video rounded-2xl overflow-hidden bg-slate-100 -mt-2">
                       <img
@@ -200,7 +200,7 @@ export default function CourseDetailPage() {
                     <div className="space-y-4">
                       <div className="p-4 rounded-2xl bg-teal-50 border border-teal-200 space-y-3">
                         <div className="flex items-center justify-between text-xs font-bold">
-                          <span className="text-[#0F766E]">Anda Sudah Terdaftar</span>
+                          <span className="text-primary">Anda Sudah Terdaftar</span>
                           <span className="text-emerald-700 font-extrabold">{enrollment.progress_percentage}%</span>
                         </div>
                         <ProgressBar percentage={enrollment.progress_percentage} showLabel={false} />
@@ -211,7 +211,7 @@ export default function CourseDetailPage() {
 
                       <Link
                         href={`/learn/${slug}/1`}
-                        className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#0F766E] hover:bg-[#134E4A] text-white font-bold rounded-xl transition-all shadow-md text-base"
+                        className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all shadow-md text-base"
                       >
                         <PlayCircle className="w-5 h-5" />
                         <span>Lanjutkan Belajar</span>
@@ -224,7 +224,7 @@ export default function CourseDetailPage() {
                       </div>
                       <Link
                         href="/dashboard/teacher"
-                        className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#0F766E] hover:bg-[#134E4A] text-white font-bold rounded-xl transition-all text-base"
+                        className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all text-base"
                       >
                         Kelola Kursus Ini
                       </Link>
@@ -235,12 +235,12 @@ export default function CourseDetailPage() {
                         <div className="text-xs text-slate-500 font-semibold uppercase tracking-wider">
                           Biaya Pendaftaran
                         </div>
-                        <div className="text-3xl font-extrabold text-[#0F766E]">GRATIS</div>
+                        <div className="text-3xl font-extrabold text-primary">GRATIS</div>
                         <div className="text-xs text-emerald-700 font-medium">Akses seumur hidup</div>
                       </div>
 
                       {enrollError && (
-                        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-[#B91C1C] text-xs font-semibold">
+                        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-danger text-xs font-semibold">
                           {enrollError}
                         </div>
                       )}
@@ -257,15 +257,15 @@ export default function CourseDetailPage() {
 
                       <div className="space-y-2 pt-2 text-xs text-slate-500">
                         <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-[#15803D]" />
+                          <CheckCircle2 className="w-4 h-4 text-success" />
                           <span>Materi langkah demi langkah</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-[#15803D]" />
+                          <CheckCircle2 className="w-4 h-4 text-success" />
                           <span>Forum diskusi interaktif</span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Award className="w-4 h-4 text-[#F59E0B]" />
+                          <Award className="w-4 h-4 text-accent" />
                           <span>Sertifikat kelulusan resmi</span>
                         </div>
                       </div>
@@ -282,15 +282,15 @@ export default function CourseDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8 space-y-8">
               {/* Tentang Kursus */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-4">
-                <h2 className="text-2xl font-bold text-[#0F172A]">Tentang Kursus</h2>
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-4">
+                <h2 className="text-2xl font-bold text-text-main">Tentang Kursus</h2>
                 <div className="text-slate-700 leading-relaxed space-y-3 text-base">
                   <p>{course.description}</p>
                 </div>
 
                 {course.teacher_bio && (
                   <div className="mt-6 pt-6 border-t border-slate-100 flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-teal-100 text-[#0F766E] flex items-center justify-center font-bold text-xl shrink-0">
+                    <div className="w-12 h-12 rounded-2xl bg-teal-100 text-primary flex items-center justify-center font-bold text-xl shrink-0">
                       {course.teacher_name ? course.teacher_name.charAt(0) : 'P'}
                     </div>
                     <div>
@@ -302,15 +302,15 @@ export default function CourseDetailPage() {
               </div>
 
               {/* Daftar Silabus Materi */}
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl font-bold text-[#0F172A]">Silabus Pembelajaran</h2>
+                    <h2 className="text-2xl font-bold text-text-main">Silabus Pembelajaran</h2>
                     <p className="text-sm text-slate-500 mt-1">
                       Materi disusun berurutan dari dasar hingga mahir ({materials.length} Materi)
                     </p>
                   </div>
-                  <span className="px-3 py-1 bg-teal-50 text-[#0F766E] border border-teal-200 rounded-full text-xs font-bold">
+                  <span className="px-3 py-1 bg-teal-50 text-primary border border-teal-200 rounded-full text-xs font-bold">
                     Berurutan
                   </span>
                 </div>
@@ -331,7 +331,7 @@ export default function CourseDetailPage() {
                           className="flex items-center justify-between p-4 rounded-2xl bg-slate-50 border border-slate-200 hover:border-teal-300 transition-colors"
                         >
                           <div className="flex items-center gap-4">
-                            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-[#0F766E] text-sm shrink-0">
+                            <div className="w-9 h-9 rounded-xl bg-white border border-slate-200 flex items-center justify-center font-bold text-primary text-sm shrink-0">
                               {mat.order_number}
                             </div>
                             <div>
@@ -345,14 +345,14 @@ export default function CourseDetailPage() {
                           <div className="flex items-center gap-2">
                             {isEnrolled ? (
                               isCompleted ? (
-                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-[#15803D] bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                                <span className="inline-flex items-center gap-1.5 text-xs font-bold text-success bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
                                   <CheckCircle2 className="w-4 h-4" />
                                   <span>Selesai</span>
                                 </span>
                               ) : (
                                 <Link
                                   href={`/learn/${slug}/${mat.order_number}`}
-                                  className="inline-flex items-center gap-1 text-xs font-bold text-[#0F766E] bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-200 transition-colors"
+                                  className="inline-flex items-center gap-1 text-xs font-bold text-primary bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-xl border border-teal-200 transition-colors"
                                 >
                                   <PlayCircle className="w-4 h-4" />
                                   <span>Pelajari</span>
@@ -375,23 +375,23 @@ export default function CourseDetailPage() {
 
             {/* Kolom Kanan: Keuntungan Kursus */}
             <div className="lg:col-span-4 space-y-6">
-              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                 <h3 className="font-bold text-lg text-slate-800">Yang Anda Dapatkan</h3>
                 <ul className="space-y-3 text-sm text-slate-600">
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-[#15803D] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
                     <span>Akses seluruh materi tanpa batas waktu</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-[#15803D] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
                     <span>Latihan dan materi teks terstruktur</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-5 h-5 text-[#15803D] shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-5 h-5 text-success shrink-0 mt-0.5" />
                     <span>Tanya jawab langsung di forum diskusi materi</span>
                   </li>
                   <li className="flex items-start gap-2.5">
-                    <Award className="w-5 h-5 text-[#F59E0B] shrink-0 mt-0.5" />
+                    <Award className="w-5 h-5 text-accent shrink-0 mt-0.5" />
                     <span>Sertifikat kelulusan digital setelah 100% selesai</span>
                   </li>
                 </ul>

@@ -112,7 +112,7 @@ function CoursesContent() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Page Header */}
       <div className="mb-10 text-center sm:text-left">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] tracking-tight">
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-text-main tracking-tight">
           Katalog Kursus Online
         </h1>
         <p className="text-slate-600 text-base mt-2">
@@ -130,7 +130,7 @@ function CoursesContent() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Cari berdasarkan judul materi atau topik kursus..."
-            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-base"
+            className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-base"
           />
         </div>
 
@@ -147,7 +147,7 @@ function CoursesContent() {
                 onClick={() => handleLevelChange(lvl.value)}
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   selectedLevel === lvl.value
-                    ? 'bg-[#0F766E] text-white shadow-sm'
+                    ? 'bg-primary text-white shadow-sm'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
               >
@@ -163,7 +163,7 @@ function CoursesContent() {
               <select
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-[#0F766E] focus:outline-none"
+                className="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-sm font-semibold text-slate-700 focus:ring-2 focus:ring-primary focus:outline-none"
               >
                 <option value="">Semua Kategori</option>
                 {categories.map((cat) => (
@@ -177,7 +177,7 @@ function CoursesContent() {
             {(q || selectedCategory || selectedLevel) && (
               <button
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-[#B91C1C] hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-danger hover:bg-red-50 rounded-xl transition-colors cursor-pointer"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Reset Filter</span>
@@ -213,7 +213,7 @@ function CoursesContent() {
       ) : (
         <div className="space-y-6">
           <div className="text-sm font-semibold text-slate-500">
-            Menampilkan <span className="text-[#0F766E] font-bold">{courses.length}</span> kursus tersedia
+            Menampilkan <span className="text-primary font-bold">{courses.length}</span> kursus tersedia
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course) => (
@@ -228,7 +228,7 @@ function CoursesContent() {
 
 export default function CoursesPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
       <main className="flex-1">
         <Suspense fallback={<div className="p-12 text-center text-slate-500">Memuat katalog...</div>}>
