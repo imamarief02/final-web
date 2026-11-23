@@ -224,7 +224,7 @@ export default function AdminDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-7xl mx-auto px-4 py-24 text-center text-slate-500 font-medium">
           Memuat Panel Administrasi...
@@ -237,7 +237,7 @@ export default function AdminDashboardPage() {
   const pendingTeachers = teachers.filter((t) => t.teacher_status === 'pending');
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
@@ -245,10 +245,10 @@ export default function AdminDashboardPage() {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <div className="inline-flex items-center gap-2 text-xs font-bold text-teal-800 uppercase tracking-wider mb-1">
-              <ShieldCheck className="w-4 h-4 text-[#0F766E]" />
+              <ShieldCheck className="w-4 h-4 text-primary" />
               <span>Pusat Kendali Sistem</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-text-main">
               Dashboard Administrator KursusDeh
             </h1>
           </div>
@@ -264,10 +264,10 @@ export default function AdminDashboardPage() {
         {stats && (
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-teal-100 text-[#0F766E] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-teal-100 text-primary flex items-center justify-center">
                 <Users className="w-5 h-5" />
               </div>
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              <div className="text-2xl sm:text-3xl font-extrabold text-text-main">
                 {stats.total_users || 0}
               </div>
               <div className="text-xs text-slate-500 font-medium">
@@ -276,10 +276,10 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 text-[#F59E0B] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-accent flex items-center justify-center">
                 <BookOpen className="w-5 h-5" />
               </div>
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              <div className="text-2xl sm:text-3xl font-extrabold text-text-main">
                 {stats.total_courses || 0}
               </div>
               <div className="text-xs text-slate-500 font-medium">
@@ -288,10 +288,10 @@ export default function AdminDashboardPage() {
             </div>
 
             <div className="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm space-y-2">
-              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-[#15803D] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-success flex items-center justify-center">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              <div className="text-2xl sm:text-3xl font-extrabold text-text-main">
                 {stats.total_enrollments || 0}
               </div>
               <div className="text-xs text-slate-500 font-medium">
@@ -303,7 +303,7 @@ export default function AdminDashboardPage() {
               <div className="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
                 <Award className="w-5 h-5" />
               </div>
-              <div className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              <div className="text-2xl sm:text-3xl font-extrabold text-text-main">
                 {stats.total_certificates || 0}
               </div>
               <div className="text-xs text-slate-500 font-medium">
@@ -319,7 +319,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('teachers')}
             className={`pb-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'teachers'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -329,7 +329,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('categories')}
             className={`pb-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'categories'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -339,7 +339,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('courses')}
             className={`pb-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'courses'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -349,7 +349,7 @@ export default function AdminDashboardPage() {
             onClick={() => setActiveTab('users')}
             className={`pb-3 text-sm font-bold border-b-2 whitespace-nowrap transition-colors cursor-pointer ${
               activeTab === 'users'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -395,13 +395,13 @@ export default function AdminDashboardPage() {
                       <div className="flex items-center justify-end gap-2 pt-2">
                         <button
                           onClick={() => handleTeacherAction(t.id, 'rejected')}
-                          className="px-3 py-1.5 rounded-xl border border-red-200 text-[#B91C1C] hover:bg-red-50 text-xs font-bold transition-colors cursor-pointer"
+                          className="px-3 py-1.5 rounded-xl border border-red-200 text-danger hover:bg-red-50 text-xs font-bold transition-colors cursor-pointer"
                         >
                           Tolak
                         </button>
                         <button
                           onClick={() => handleTeacherAction(t.id, 'approved')}
-                          className="px-4 py-1.5 rounded-xl bg-[#0F766E] hover:bg-[#134E4A] text-white text-xs font-bold transition-colors cursor-pointer shadow-sm"
+                          className="px-4 py-1.5 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold transition-colors cursor-pointer shadow-sm"
                         >
                           Setujui Akun
                         </button>
@@ -444,7 +444,7 @@ export default function AdminDashboardPage() {
                             {t.teacher_status !== 'approved' && (
                               <button
                                 onClick={() => handleTeacherAction(t.id, 'approved')}
-                                className="text-xs font-bold text-[#0F766E] hover:underline cursor-pointer mr-2.5"
+                                className="text-xs font-bold text-primary hover:underline cursor-pointer mr-2.5"
                               >
                                 Setujui
                               </button>
@@ -459,7 +459,7 @@ export default function AdminDashboardPage() {
                             )}
                             <button
                               onClick={() => handleDeleteTeacher(t.id, t.name)}
-                              className="text-xs font-bold text-[#B91C1C] hover:underline cursor-pointer"
+                              className="text-xs font-bold text-danger hover:underline cursor-pointer"
                               title="Hapus akun pengajar"
                             >
                               Hapus
@@ -522,7 +522,7 @@ export default function AdminDashboardPage() {
                         {c.description || '-'}
                       </td>
                       <td className="py-3.5 px-4">
-                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-[#0F766E] border border-teal-200">
+                        <span className="px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-primary border border-teal-200">
                           {c.total_courses || 0} Kursus
                         </span>
                       </td>
@@ -535,13 +535,13 @@ export default function AdminDashboardPage() {
                             setCatError('');
                             setShowCategoryModal(true);
                           }}
-                          className="p-1.5 text-slate-600 hover:text-[#0F766E] rounded-lg hover:bg-slate-100 mr-1 cursor-pointer"
+                          className="p-1.5 text-slate-600 hover:text-primary rounded-lg hover:bg-slate-100 mr-1 cursor-pointer"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteCategory(c.id)}
-                          className="p-1.5 text-slate-400 hover:text-[#B91C1C] rounded-lg hover:bg-red-50 cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-danger rounded-lg hover:bg-red-50 cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -604,7 +604,7 @@ export default function AdminDashboardPage() {
                         </button>
                         <button
                           onClick={() => handleDeleteCourse(course.id)}
-                          className="p-1.5 text-slate-400 hover:text-[#B91C1C] rounded-lg hover:bg-red-50 cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-danger rounded-lg hover:bg-red-50 cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -652,7 +652,7 @@ export default function AdminDashboardPage() {
                               ? 'bg-purple-100 text-purple-800'
                               : u.role === 'teacher'
                               ? 'bg-amber-100 text-amber-800'
-                              : 'bg-teal-100 text-[#0F766E]'
+                              : 'bg-teal-100 text-primary'
                           }`}
                         >
                           {u.role}
@@ -690,7 +690,7 @@ export default function AdminDashboardPage() {
             </h3>
 
             {catError && (
-              <div className="p-3 rounded-xl bg-red-50 text-[#B91C1C] text-xs font-semibold">
+              <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
                 {catError}
               </div>
             )}

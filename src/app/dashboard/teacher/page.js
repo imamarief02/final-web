@@ -272,7 +272,7 @@ export default function TeacherDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-7xl mx-auto px-4 py-24 text-center text-slate-500 font-medium">
           Memuat Dashboard Pengajar...
@@ -285,18 +285,18 @@ export default function TeacherDashboardPage() {
   // Jika akun pengajar masih pending (PRD BR-01)
   if (user?.teacher_status === 'pending') {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <main className="flex-1 max-w-3xl mx-auto px-4 py-20">
           <div className="bg-white border border-amber-200 rounded-3xl p-8 sm:p-12 shadow-xl text-center space-y-6">
-            <div className="w-16 h-16 rounded-full bg-amber-100 text-[#F59E0B] flex items-center justify-center mx-auto">
+            <div className="w-16 h-16 rounded-full bg-amber-100 text-accent flex items-center justify-center mx-auto">
               <ShieldAlert className="w-8 h-8" />
             </div>
             <div className="space-y-2">
               <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
                 Status: Menunggu Peninjauan Admin
               </span>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-text-main">
                 Pendaftaran Pengajar Sedang Diproses
               </h1>
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
@@ -314,18 +314,18 @@ export default function TeacherDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         {/* Header Dashboard Pengajar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#0F766E] uppercase tracking-wider mb-1">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-primary uppercase tracking-wider mb-1">
               <span className="w-2 h-2 rounded-full bg-emerald-500" />
               <span>Pengajar Terverifikasi</span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-text-main">
               Panel Pengajar: {user?.name}
             </h1>
           </div>
@@ -360,7 +360,7 @@ export default function TeacherDashboardPage() {
             onClick={() => setActiveTab('courses')}
             className={`pb-3 text-sm font-bold border-b-2 transition-colors cursor-pointer ${
               activeTab === 'courses'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -370,7 +370,7 @@ export default function TeacherDashboardPage() {
             onClick={() => setActiveTab('materials')}
             className={`pb-3 text-sm font-bold border-b-2 transition-colors cursor-pointer ${
               activeTab === 'materials'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -380,7 +380,7 @@ export default function TeacherDashboardPage() {
             onClick={() => setActiveTab('students')}
             className={`pb-3 text-sm font-bold border-b-2 transition-colors cursor-pointer ${
               activeTab === 'students'
-                ? 'border-[#0F766E] text-[#0F766E]'
+                ? 'border-primary text-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
             }`}
           >
@@ -447,7 +447,7 @@ export default function TeacherDashboardPage() {
                           setSelectedCourseForMat(course);
                           setActiveTab('materials');
                         }}
-                        className="text-xs font-bold text-[#0F766E] hover:underline cursor-pointer"
+                        className="text-xs font-bold text-primary hover:underline cursor-pointer"
                       >
                         Kelola Materi
                       </button>
@@ -466,14 +466,14 @@ export default function TeacherDashboardPage() {
                             });
                             setShowCourseModal(true);
                           }}
-                          className="p-1.5 text-slate-600 hover:text-[#0F766E] rounded-lg hover:bg-slate-100 cursor-pointer"
+                          className="p-1.5 text-slate-600 hover:text-primary rounded-lg hover:bg-slate-100 cursor-pointer"
                           title="Edit Kursus"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteCourse(course.id)}
-                          className="p-1.5 text-slate-400 hover:text-[#B91C1C] rounded-lg hover:bg-red-50 cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-danger rounded-lg hover:bg-red-50 cursor-pointer"
                           title="Hapus Kursus"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -502,7 +502,7 @@ export default function TeacherDashboardPage() {
                     const picked = courses.find((c) => c.id === parseInt(e.target.value, 10));
                     setSelectedCourseForMat(picked);
                   }}
-                  className="px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50 font-bold text-slate-800 text-sm focus:ring-2 focus:ring-[#0F766E]"
+                  className="px-4 py-2.5 rounded-xl border border-slate-300 bg-slate-50 font-bold text-slate-800 text-sm focus:ring-2 focus:ring-primary"
                 >
                   {courses.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -555,7 +555,7 @@ export default function TeacherDashboardPage() {
                       className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-4"
                     >
                       <div className="flex items-center gap-4">
-                        <span className="w-9 h-9 rounded-xl bg-teal-100 text-[#0F766E] font-bold flex items-center justify-center text-sm shrink-0">
+                        <span className="w-9 h-9 rounded-xl bg-teal-100 text-primary font-bold flex items-center justify-center text-sm shrink-0">
                           {mat.order_number}
                         </span>
                         <div>
@@ -575,13 +575,13 @@ export default function TeacherDashboardPage() {
                             });
                             setShowMaterialModal(true);
                           }}
-                          className="p-2 text-slate-600 hover:text-[#0F766E] rounded-lg hover:bg-white cursor-pointer"
+                          className="p-2 text-slate-600 hover:text-primary rounded-lg hover:bg-white cursor-pointer"
                         >
                           <Edit className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteMaterial(mat.id)}
-                          className="p-2 text-slate-400 hover:text-[#B91C1C] rounded-lg hover:bg-red-50 cursor-pointer"
+                          className="p-2 text-slate-400 hover:text-danger rounded-lg hover:bg-red-50 cursor-pointer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -645,7 +645,7 @@ export default function TeacherDashboardPage() {
                         </td>
                         <td className="py-3.5 px-4">
                           {s.progress_percentage === 100 ? (
-                            <span className="inline-flex items-center gap-1 text-xs font-bold text-[#15803D] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 text-xs font-bold text-success bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>Selesai</span>
                             </span>
@@ -674,7 +674,7 @@ export default function TeacherDashboardPage() {
             </h3>
 
             {courseFormError && (
-              <div className="p-3 rounded-xl bg-red-50 text-[#B91C1C] text-xs font-semibold">
+              <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
                 {courseFormError}
               </div>
             )}
@@ -800,7 +800,7 @@ export default function TeacherDashboardPage() {
             </h3>
 
             {materialFormError && (
-              <div className="p-3 rounded-xl bg-red-50 text-[#B91C1C] text-xs font-semibold">
+              <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
                 {materialFormError}
               </div>
             )}

@@ -56,7 +56,7 @@ export default function StudentDashboardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+      <div className="min-h-screen flex flex-col bg-page">
         <Navbar />
         <div className="flex-1 max-w-7xl mx-auto px-4 py-24 text-center text-slate-500">
           Memuat data belajar Anda...
@@ -71,15 +71,15 @@ export default function StudentDashboardPage() {
   const totalCertificates = courses.filter((c) => c.certificate_code).length;
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-10">
         {/* Welcome Greeting Banner */}
-        <div className="bg-gradient-to-r from-[#0F766E] to-[#134E4A] rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="bg-linear-to-r from-primary to-primary-dark rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-800/80 text-teal-200 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-[#F59E0B]" />
+              <Sparkles className="w-3.5 h-3.5 text-accent" />
               <span>Ruang Belajar Siswa</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
@@ -100,31 +100,31 @@ export default function StudentDashboardPage() {
         {/* Statistics Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-teal-100 text-[#0F766E] flex items-center justify-center shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-teal-100 text-primary flex items-center justify-center shrink-0">
               <BookOpen className="w-7 h-7" />
             </div>
             <div>
-              <div className="text-3xl font-extrabold text-[#0F172A]">{courses.length}</div>
+              <div className="text-3xl font-extrabold text-text-main">{courses.length}</div>
               <div className="text-xs font-semibold text-slate-500 mt-0.5">Kursus Terdaftar</div>
             </div>
           </div>
 
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-[#15803D] flex items-center justify-center shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-100 text-success flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-7 h-7" />
             </div>
             <div>
-              <div className="text-3xl font-extrabold text-[#0F172A]">{completedCourses.length}</div>
+              <div className="text-3xl font-extrabold text-text-main">{completedCourses.length}</div>
               <div className="text-xs font-semibold text-slate-500 mt-0.5">Kursus Selesai</div>
             </div>
           </div>
 
           <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-amber-100 text-[#F59E0B] flex items-center justify-center shrink-0">
+            <div className="w-14 h-14 rounded-2xl bg-amber-100 text-accent flex items-center justify-center shrink-0">
               <Award className="w-7 h-7" />
             </div>
             <div>
-              <div className="text-3xl font-extrabold text-[#0F172A]">{totalCertificates}</div>
+              <div className="text-3xl font-extrabold text-text-main">{totalCertificates}</div>
               <div className="text-xs font-semibold text-slate-500 mt-0.5">Sertifikat Kelulusan</div>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function StudentDashboardPage() {
         {/* Section: Kursus yang Sedang Diikuti */}
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-extrabold text-[#0F172A]">
+            <h2 className="text-2xl font-extrabold text-text-main">
               Kursus yang Sedang Anda Pelajari
             </h2>
             <span className="text-xs font-bold text-slate-500">
@@ -175,7 +175,7 @@ export default function StudentDashboardPage() {
                           <Badge variant="category">{c.category_name}</Badge>
                         </div>
                         {isComplete ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-bold text-[#15803D] bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-success bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>Lulus</span>
                           </span>
@@ -187,7 +187,7 @@ export default function StudentDashboardPage() {
                         ) : null}
                       </div>
 
-                      <h3 className="font-bold text-xl text-[#0F172A] line-clamp-2">
+                      <h3 className="font-bold text-xl text-text-main line-clamp-2">
                         {c.title}
                       </h3>
 
@@ -215,7 +215,7 @@ export default function StudentDashboardPage() {
                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
                       <Link
                         href={`/learn/${c.slug}/1`}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0F766E] hover:bg-[#134E4A] text-white font-bold rounded-xl text-sm transition-all"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl text-sm transition-all"
                       >
                         <PlayCircle className="w-4 h-4" />
                         <span>{isComplete ? 'Ulas Materi' : hasNewMaterials ? 'Pelajari Materi Baru' : 'Lanjutkan Belajar'}</span>
@@ -227,7 +227,7 @@ export default function StudentDashboardPage() {
                           className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 bg-amber-50 hover:bg-amber-100 px-3.5 py-2 rounded-xl border border-amber-200 transition-colors"
                           title="Lihat & Unduh Sertifikat Kelulusan"
                         >
-                          <Award className="w-4 h-4 text-[#F59E0B]" />
+                          <Award className="w-4 h-4 text-accent" />
                           <span>Sertifikat</span>
                         </Link>
                       )}
