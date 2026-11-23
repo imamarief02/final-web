@@ -71,20 +71,20 @@ function LoginForm() {
 
   return (
     <div className="max-w-md w-full mx-auto px-4 py-12">
-      <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl space-y-6">
+      <div className="bg-white border border-slate-300/80 rounded-2xl p-8 shadow-sm space-y-6">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-[#0F766E] flex items-center justify-center text-white mx-auto shadow-md">
-            <BookOpen className="w-7 h-7 text-[#F59E0B]" />
+          <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white mx-auto shadow-md">
+            <BookOpen className="w-7 h-7 text-accent" />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#0F172A]">Masuk ke KursusDeh</h1>
+          <h1 className="text-2xl font-extrabold text-text-main">Masuk ke KursusDeh</h1>
           <p className="text-slate-500 text-sm">
             Lanjutkan belajar dan pantau kemajuan kelas Anda
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-[#B91C1C] text-xs font-semibold flex items-center gap-2">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-danger text-xs font-semibold flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -103,7 +103,7 @@ function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="nama@email.com"
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           </div>
@@ -120,7 +120,7 @@ function LoginForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           </div>
@@ -141,7 +141,7 @@ function LoginForm() {
           Belum punya akun?{' '}
           <Link
             href="/register"
-            className="font-bold text-[#0F766E] hover:underline"
+            className="font-bold text-primary hover:underline"
           >
             Daftar Gratis
           </Link>
@@ -153,7 +153,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
       <main className="flex-1 flex items-center justify-center">
         <Suspense fallback={<div className="p-8 text-slate-500">Memuat form login...</div>}>

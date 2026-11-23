@@ -25,6 +25,37 @@ export async function PUT(request, { params }) {
 
     const { title, description, categoryId, level, thumbnailUrl, status: courseStatus } = await request.json();
 
+    if (level && !['pemula', 'menengah', 'lanjutan'].includes(level)) {
+      return NextResponse.json(
+        { error: 'Level kursus harus berupa pemula, menengah, atau lanjutan.' },
+        { status: 400 }
+      );
+    }
+
+    if (courseStatus && !['draft', 'published'].includes(courseStatus)) {
+      return NextResponse.json(
+        { error: 'Status kursus harus berupa draft atau published.' },
+        { status: 400 }
+      );
+    }
+
+    if (categoryId) {
+      const catCheck = await query(`SELECT id FROM categories WHERE id = $1`, [categoryId]);
+      if (catCheck.rows.length === 0) {
+        return NextResponse.json(
+          { error: 'Kategori yang dipilih tidak valid.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (title && title.trim().length > 150) {
+      return NextResponse.json(
+        { error: 'Judul kursus maksimal 150 karakter.' },
+        { status: 400 }
+      );
+    }
+
     const updateRes = await query(
       `UPDATE courses
        SET title = COALESCE($1, title),

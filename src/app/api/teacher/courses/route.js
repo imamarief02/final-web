@@ -68,11 +68,40 @@ export async function POST(request) {
       );
     }
 
+    if (title.trim().length > 150) {
+      return NextResponse.json(
+        { error: 'Judul kursus maksimal 150 karakter.' },
+        { status: 400 }
+      );
+    }
+
+    if (!['pemula', 'menengah', 'lanjutan'].includes(level)) {
+      return NextResponse.json(
+        { error: 'Level kursus harus berupa pemula, menengah, atau lanjutan.' },
+        { status: 400 }
+      );
+    }
+
+    if (!['draft', 'published'].includes(courseStatus)) {
+      return NextResponse.json(
+        { error: 'Status kursus harus berupa draft atau published.' },
+        { status: 400 }
+      );
+    }
+
+    const catCheck = await query(`SELECT id FROM categories WHERE id = $1`, [categoryId]);
+    if (catCheck.rows.length === 0) {
+      return NextResponse.json(
+        { error: 'Kategori yang dipilih tidak valid.' },
+        { status: 400 }
+      );
+    }
+
     let slug = slugify(title);
     // Pastikan keunikan slug
     const checkSlug = await query('SELECT id FROM courses WHERE slug = $1', [slug]);
     if (checkSlug.rows.length > 0) {
-      slug = `${slug}-${Date.now().toString().slice(-4)}`;
+      slug = `${slug}-${Date.now()}`;
     }
 
     const insertRes = await query(

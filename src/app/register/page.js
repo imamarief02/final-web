@@ -56,19 +56,19 @@ function RegisterForm() {
 
   return (
     <div className="max-w-lg w-full mx-auto px-4 py-12">
-      <div className="bg-white border border-slate-200 rounded-3xl p-8 shadow-xl space-y-6">
+      <div className="bg-white border border-slate-300/80 rounded-2xl p-8 shadow-sm space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-[#0F766E] flex items-center justify-center text-white mx-auto shadow-md">
-            <BookOpen className="w-7 h-7 text-[#F59E0B]" />
+          <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center text-white mx-auto shadow-md">
+            <BookOpen className="w-7 h-7 text-accent" />
           </div>
-          <h1 className="text-2xl font-extrabold text-[#0F172A]">Daftar Akun KursusDeh</h1>
+          <h1 className="text-2xl font-extrabold text-text-main">Daftar Akun KursusDeh</h1>
           <p className="text-slate-500 text-sm">
             Mulai belajar atau bagikan keahlian Anda ke ribuan siswa
           </p>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-[#B91C1C] text-xs font-semibold flex items-center gap-2">
+          <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-danger text-xs font-semibold flex items-center gap-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -86,7 +86,7 @@ function RegisterForm() {
                 onClick={() => setRole('student')}
                 className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                   role === 'student'
-                    ? 'border-[#0F766E] bg-teal-50/70 text-[#0F766E]'
+                    ? 'border-primary bg-teal-50/70 text-primary'
                     : 'border-slate-200 hover:border-slate-300 text-slate-700'
                 }`}
               >
@@ -99,7 +99,7 @@ function RegisterForm() {
                 onClick={() => setRole('teacher')}
                 className={`p-3.5 rounded-2xl border-2 text-left transition-all cursor-pointer ${
                   role === 'teacher'
-                    ? 'border-[#F59E0B] bg-amber-50/70 text-amber-900'
+                    ? 'border-accent bg-amber-50/70 text-amber-900'
                     : 'border-slate-200 hover:border-slate-300 text-slate-700'
                 }`}
               >
@@ -111,7 +111,7 @@ function RegisterForm() {
 
           {role === 'teacher' && (
             <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-medium flex items-start gap-2">
-              <Info className="w-4 h-4 text-[#F59E0B] shrink-0 mt-0.5" />
+              <Info className="w-4 h-4 text-accent shrink-0 mt-0.5" />
               <span>
                 <strong>Catatan Admin:</strong> Akun pengajar akan ditinjau oleh admin terlebih dahulu sebelum dapat menerbitkan kursus ke katalog publik.
               </span>
@@ -130,7 +130,7 @@ function RegisterForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Contoh: Budi Santoso"
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           </div>
@@ -147,7 +147,7 @@ function RegisterForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="nama@email.com"
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           </div>
@@ -165,7 +165,7 @@ function RegisterForm() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           </div>
@@ -180,7 +180,7 @@ function RegisterForm() {
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 placeholder="Tuliskan pengalaman mengajar atau bidang yang Anda kuasai..."
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-[#0F172A] placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0F766E] focus:bg-white text-sm"
+                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-text-main placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary focus:bg-white text-sm"
               />
             </div>
           )}
@@ -198,7 +198,7 @@ function RegisterForm() {
 
         <div className="text-center pt-2 text-sm text-slate-600">
           Sudah memiliki akun?{' '}
-          <Link href="/login" className="font-bold text-[#0F766E] hover:underline">
+          <Link href="/login" className="font-bold text-primary hover:underline">
             Masuk Sekarang
           </Link>
         </div>
@@ -209,7 +209,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC]">
+    <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
       <main className="flex-1 flex items-center justify-center">
         <Suspense fallback={<div className="p-8 text-slate-500">Memuat form pendaftaran...</div>}>
