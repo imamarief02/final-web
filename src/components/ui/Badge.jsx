@@ -10,7 +10,7 @@ export default function Badge({ children, variant = 'default', className = '' })
     approved: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     pending: 'bg-amber-100 text-amber-800 border-amber-200',
     rejected: 'bg-red-100 text-red-800 border-red-200',
-    category: 'bg-[#CCFBF1] text-[#0F766E] border-teal-200',
+    category: 'bg-soft text-primary border-teal-200',
     default: 'bg-slate-100 text-slate-800 border-slate-200',
   };
 

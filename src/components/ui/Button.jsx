@@ -14,12 +14,12 @@ export default function Button({
   const baseStyles = 'inline-flex items-center justify-center font-semibold transition-all duration-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer min-h-[44px]';
 
   const variants = {
-    primary: 'bg-[#0F766E] hover:bg-[#134E4A] text-white focus:ring-[#0F766E] shadow-sm',
-    cta: 'bg-[#F59E0B] hover:bg-amber-600 text-[#1C1917] font-bold focus:ring-[#F59E0B] shadow-sm',
+    primary: 'bg-primary hover:bg-primary-dark text-white focus:ring-primary shadow-sm',
+    cta: 'bg-accent hover:bg-amber-600 text-stone-900 font-bold focus:ring-accent shadow-sm',
     secondary: 'bg-white border border-slate-300 text-slate-800 hover:bg-slate-50 focus:ring-slate-400',
-    danger: 'bg-[#B91C1C] hover:bg-red-800 text-white focus:ring-[#B91C1C]',
-    ghost: 'text-[#0F766E] hover:bg-[#CCFBF1]/40 focus:ring-[#0F766E]',
-    outline: 'border-2 border-[#0F766E] text-[#0F766E] hover:bg-[#0F766E] hover:text-white focus:ring-[#0F766E]',
+    danger: 'bg-danger hover:bg-red-800 text-white focus:ring-danger',
+    ghost: 'text-primary hover:bg-soft/40 focus:ring-primary',
+    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white focus:ring-primary',
   };
 
   const sizes = {

@@ -60,12 +60,12 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo Brand */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-[#0F766E] flex items-center justify-center text-white shadow-sm shadow-teal-900/10 group-hover:scale-105 transition-transform duration-200">
-              <BookOpen className="w-5 h-5 text-[#F59E0B]" />
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-white shadow-sm shadow-teal-900/10 group-hover:scale-105 transition-transform duration-200">
+              <BookOpen className="w-5 h-5 text-accent" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-[#0F766E]">
-                Kursus<span className="text-[#F59E0B]">Deh</span>
+              <span className="text-xl font-bold tracking-tight text-primary">
+                Kursus<span className="text-accent">Deh</span>
               </span>
               <span className="text-[10px] text-slate-500 font-medium -mt-1 hidden sm:block">
                 Belajar Langkah Demi Langkah
@@ -81,7 +81,7 @@ export default function Navbar() {
                 href={item.href}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-sm transition-all duration-200 ${
                   item.isActive
-                    ? 'bg-teal-50 border-2 border-[#0F766E] text-[#0F766E] font-extrabold shadow-xs'
+                    ? 'bg-teal-50 border-2 border-primary text-primary font-extrabold shadow-xs'
                     : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/70 font-semibold'
                 }`}
               >
@@ -104,7 +104,7 @@ export default function Navbar() {
                     </div>
                     <button
                       onClick={handleLogout}
-                      className="px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-[#B91C1C] border border-red-200 text-xs font-bold transition-all cursor-pointer shadow-xs"
+                      className="px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-danger border border-red-200 text-xs font-bold transition-all cursor-pointer shadow-xs"
                     >
                       Logout
                     </button>
@@ -113,13 +113,13 @@ export default function Navbar() {
                   <div className="flex items-center gap-2.5">
                     <Link
                       href="/login"
-                      className="px-4 py-2 rounded-xl border-2 border-[#0F766E] text-[#0F766E] text-sm font-bold hover:bg-[#0F766E] hover:text-white transition-all duration-200"
+                      className="px-4 py-2 rounded-xl border-2 border-primary text-primary text-sm font-bold hover:bg-primary hover:text-white transition-all duration-200"
                     >
                       Masuk
                     </Link>
                     <Link
                       href="/register"
-                      className="px-4 py-2 rounded-xl bg-[#F59E0B] hover:bg-amber-600 text-[#1C1917] text-sm font-bold transition-all duration-200 shadow-sm"
+                      className="px-4 py-2 rounded-xl bg-accent hover:bg-amber-600 text-stone-900 text-sm font-bold transition-all duration-200 shadow-sm"
                     >
                       Daftar Akun
                     </Link>
@@ -153,13 +153,13 @@ export default function Navbar() {
                 onClick={() => setMobileMenuOpen(false)}
                 className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm transition-all ${
                   item.isActive
-                    ? 'bg-teal-50 border-2 border-[#0F766E] text-[#0F766E] font-extrabold'
+                    ? 'bg-teal-50 border-2 border-primary text-primary font-extrabold'
                     : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-semibold'
                 }`}
               >
                 <span>{item.label}</span>
                 {item.isActive && (
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#0F766E] text-white">
+                  <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-primary text-white">
                     Sedang Dibuka
                   </span>
                 )}
@@ -181,7 +181,7 @@ export default function Navbar() {
                     setMobileMenuOpen(false);
                     handleLogout();
                   }}
-                  className="flex items-center justify-center w-full py-2.5 text-[#B91C1C] font-semibold border border-red-200 rounded-xl hover:bg-red-50 transition-colors"
+                  className="flex items-center justify-center w-full py-2.5 text-danger font-semibold border border-red-200 rounded-xl hover:bg-red-50 transition-colors"
                 >
                   Logout
                 </button>
@@ -191,14 +191,14 @@ export default function Navbar() {
                 <Link
                   href="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 border-2 border-[#0F766E] text-[#0F766E] font-bold rounded-xl"
+                  className="w-full text-center py-3 border-2 border-primary text-primary font-bold rounded-xl"
                 >
                   Masuk
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-3 bg-[#F59E0B] text-[#1C1917] font-bold rounded-xl"
+                  className="w-full text-center py-3 bg-accent text-stone-900 font-bold rounded-xl"
                 >
                   Daftar Akun Baru
                 </Link>
