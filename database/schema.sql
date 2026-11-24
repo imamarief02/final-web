@@ -30,6 +30,7 @@ CREATE TABLE users (
   teacher_status teacher_state,
   bio            TEXT,
   avatar_url     TEXT,
+  approved_at    TIMESTAMPTZ,
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CONSTRAINT chk_teacher_status CHECK (
     (role = 'teacher' AND teacher_status IS NOT NULL) OR
@@ -61,6 +62,8 @@ CREATE TABLE courses (
   thumbnail_url TEXT,
   level         course_level  NOT NULL DEFAULT 'pemula',
   status        course_status NOT NULL DEFAULT 'draft',
+  start_date    DATE,
+  end_date      DATE,
   created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

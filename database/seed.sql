@@ -1,20 +1,21 @@
 -- 1. Pengguna (Users)
 -- Hash password123: $2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe
-INSERT INTO users (id, name, email, password_hash, role, teacher_status, bio, avatar_url)
+INSERT INTO users (id, name, email, password_hash, role, teacher_status, bio, avatar_url, approved_at)
 VALUES 
-  (1, 'Admin Pusat KursusDeh', 'admin@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'admin', NULL, 'Administrator Sistem KursusDeh', NULL),
-  (2, 'Budi Santoso, S.Kom', 'budi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL),
-  (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL),
-  (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
-  (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL),
-  (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL),
-  (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL)
+  (1, 'Admin Pusat KursusDeh', 'admin@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'admin', NULL, 'Administrator Sistem KursusDeh', NULL, NULL),
+  (2, 'Budi Santoso, S.Kom', 'budi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL, NOW() - INTERVAL '3 days'),
+  (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL, NULL),
+  (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
+  (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL),
+  (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
+  (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL)
 ON CONFLICT (id) DO UPDATE SET 
   name = EXCLUDED.name,
   email = EXCLUDED.email,
   password_hash = EXCLUDED.password_hash,
   role = EXCLUDED.role,
-  teacher_status = EXCLUDED.teacher_status;
+  teacher_status = EXCLUDED.teacher_status,
+  approved_at = EXCLUDED.approved_at;
 
 ALTER SEQUENCE users_id_seq RESTART WITH 10;
 
@@ -34,27 +35,29 @@ ON CONFLICT (id) DO UPDATE SET
 ALTER SEQUENCE categories_id_seq RESTART WITH 6;
 
 -- 3. Kursus (Courses)
-INSERT INTO courses (id, teacher_id, category_id, title, slug, description, thumbnail_url, level, status)
+INSERT INTO courses (id, teacher_id, category_id, title, slug, description, thumbnail_url, level, status, start_date, end_date)
 VALUES 
-  (1, 2, 1, 'Dasar-Dasar HTML & CSS untuk Pemula', 'dasar-html-css-pemula', 'Kursus ramah pemula untuk membangun fondasi web statis pertama Anda menggunakan tag HTML semantik dan styling CSS modern.', '/images/courses/dasardasarhtlmcss.jpg', 'pemula', 'published'),
-  (2, 2, 1, 'Mastering Tailwind CSS Modern', 'mastering-tailwind-css', 'Pelajari cara cepat membuat antarmuka web responsif dan elegan dengan utility-first styling Tailwind CSS.', '/images/courses/tailwindcss.jpg', 'menengah', 'published'),
-  (3, 2, 2, 'Dasar Riset UI/UX & Wireframing', 'dasar-ui-ux-wireframing', 'Pahami metode Human-Centered Design untuk merancang aplikasi yang intuitif, nyaman, dan disukai pengguna.', '/images/courses/uiuxwireframing.jpg', 'pemula', 'published'),
-  (4, 2, 3, 'Analisis Data Python untuk Pemula', 'analisis-data-python', 'Panduan langkah demi langkah memproses tabel data, membersihkan data, dan membuat grafik visual menarik.', '/images/courses/analisisdatapython.jpg', 'pemula', 'published'),
-  (5, 2, 4, 'Percakapan Bahasa Inggris Sehari-hari', 'percakapan-bahasa-inggris', 'Tingkatkan rasa percaya diri berbicara bahasa Inggris dalam berbagai situasi umum dan profesional.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80', 'pemula', 'published')
+  (1, 2, 1, 'Dasar-Dasar HTML & CSS untuk Pemula', 'dasar-html-css-pemula', 'Kursus ramah pemula untuk membangun fondasi web statis pertama Anda menggunakan tag HTML semantik dan styling CSS modern.', '/images/courses/dasardasarhtlmcss.jpg', 'pemula', 'published', NULL, NULL),
+  (2, 2, 1, 'Mastering Tailwind CSS Modern', 'mastering-tailwind-css', 'Pelajari cara cepat membuat antarmuka web responsif dan elegan dengan utility-first styling Tailwind CSS.', '/images/courses/tailwindcss.jpg', 'menengah', 'published', '2026-12-01', '2026-12-31'),
+  (3, 2, 2, 'Dasar Riset UI/UX & Wireframing', 'dasar-ui-ux-wireframing', 'Pahami metode Human-Centered Design untuk merancang aplikasi yang intuitif, nyaman, dan disukai pengguna.', '/images/courses/uiuxwireframing.jpg', 'pemula', 'published', NULL, NULL),
+  (4, 2, 3, 'Analisis Data Python untuk Pemula', 'analisis-data-python', 'Panduan langkah demi langkah memproses tabel data, membersihkan data, dan membuat grafik visual menarik.', '/images/courses/analisisdatapython.jpg', 'pemula', 'published', '2026-12-10', '2027-01-15'),
+  (5, 2, 4, 'Percakapan Bahasa Inggris Sehari-hari', 'percakapan-bahasa-inggris', 'Tingkatkan rasa percaya diri berbicara bahasa Inggris dalam berbagai situasi umum dan profesional.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80', 'pemula', 'published', NULL, NULL)
 ON CONFLICT (id) DO UPDATE SET 
   title = EXCLUDED.title,
   slug = EXCLUDED.slug,
   description = EXCLUDED.description,
   thumbnail_url = EXCLUDED.thumbnail_url,
   level = EXCLUDED.level,
-  status = EXCLUDED.status;
+  status = EXCLUDED.status,
+  start_date = EXCLUDED.start_date,
+  end_date = EXCLUDED.end_date;
 
 ALTER SEQUENCE courses_id_seq RESTART WITH 6;
 
 -- 4. Materi Kursus Berurutan (Materials)
 INSERT INTO materials (id, course_id, title, content, order_number)
 VALUES 
-  (1, 1, 'Pengenalan Web & Anatomi HTML', $Selamat datang di KursusDeh! Di bab pertama ini, kita akan memulai perjalanan memahami bagaimana sebuah halaman website diciptakan.
+  (1, 1, "Pengenalan Web & Anatomi HTML", $TAG_1$Selamat datang di KursusDeh! Di bab pertama ini, kita akan memulai perjalanan memahami bagaimana sebuah halaman website diciptakan.
 
 1. Apa itu HTML?
 HTML merupakan singkatan dari HyperText Markup Language. Berbeda dengan bahasa pemrograman seperti Python atau JavaScript yang memiliki logika algoritma, HTML adalah bahasa markah (markup). Artinya, HTML bertugas memberikan struktur, label, dan arti pada konten yang Anda tulis, seperti menentukan mana yang merupakan judul, paragraf, gambar, maupun tombol.
@@ -88,8 +91,8 @@ Setiap dokumen web modern dibangun menggunakan struktur kerangka baku berikut:
 • <body>: Area utama tempat semua konten visual ditulis, mulai dari teks, gambar, video, hingga navigasi.
 
 4. Tips Praktik untuk Pemula:
-Selalu pastikan setiap tag pembuka memiliki tag penutup yang sesuai (contoh: <h1> harus ditutup dengan </h1>), serta jaga kerapian indentasi (spasi menjorok) agar kode Anda mudah dibaca oleh diri sendiri dan tim pengembang lain.$, 1),
-  (2, 1, 'Bekerja dengan Teks, Gambar, dan Tautan', $Setelah memahami kerangka dasar pada bab sebelumnya, sekarang kita akan mengisi dokumen web Anda dengan tiga elemen paling fundamental: teks terstruktur, gambar pendukung, dan tautan antar-halaman.
+Selalu pastikan setiap tag pembuka memiliki tag penutup yang sesuai (contoh: <h1> harus ditutup dengan </h1>), serta jaga kerapian indentasi (spasi menjorok) agar kode Anda mudah dibaca oleh diri sendiri dan tim pengembang lain.$TAG_1$, 1),
+  (2, 1, "Bekerja dengan Teks, Gambar, dan Tautan", $TAG_2$Setelah memahami kerangka dasar pada bab sebelumnya, sekarang kita akan mengisi dokumen web Anda dengan tiga elemen paling fundamental: teks terstruktur, gambar pendukung, dan tautan antar-halaman.
 
 1. Hierarki Judul dan Paragraf
 HTML menyediakan enam tingkatan heading (judul), dari <h1> sebagai judul terpenting hingga <h6> sebagai sub-judul terkecil.
@@ -137,8 +140,8 @@ Berikut contoh implementasi lengkapnya:
 ```
 
 4. Catatan Praktik Baik:
-Hanya gunakan satu tag <h1> per halaman untuk menjaga hierarki konten yang ramah mesin pencari (SEO) dan ramah pembaca layar (screen reader).$, 2),
-  (3, 1, 'Pengantar CSS & Pewarnaan Elemen', $Halaman web yang hanya memiliki HTML ibarat bangunan yang baru selesai dipasang batu bata tanpa cat dan plester. Di bab ini, kita akan mempelajari CSS (Cascading Style Sheets) untuk memberikan gaya visual, warna, dan tipografi yang memikat.
+Hanya gunakan satu tag <h1> per halaman untuk menjaga hierarki konten yang ramah mesin pencari (SEO) dan ramah pembaca layar (screen reader).$TAG_2$, 2),
+  (3, 1, "Pengantar CSS & Pewarnaan Elemen", $TAG_3$Halaman web yang hanya memiliki HTML ibarat bangunan yang baru selesai dipasang batu bata tanpa cat dan plester. Di bab ini, kita akan mempelajari CSS (Cascading Style Sheets) untuk memberikan gaya visual, warna, dan tipografi yang memikat.
 
 1. Tiga Cara Menghubungkan CSS
 • External CSS (Paling Dianjurkan): Menuliskan kode CSS pada file terpisah berformat .css lalu menghubungkannya menggunakan tag <link rel="stylesheet" href="style.css"> di dalam <head>.
@@ -192,8 +195,8 @@ body {
 ```
 
 3. Rangkuman Selector:
-Gunakan class (.nama-class) untuk elemen yang memiliki gaya berulang pada banyak tempat, dan gunakan ID (#nama-id) secara hemat khusus untuk elemen tunggal yang unik di halaman.$, 3),
-  (4, 1, 'Konsep Box Model & Tata Letak Dasar', $Box Model adalah fondasi paling esensial dalam tata letak (layout) CSS. Setiap elemen HTML (baik teks, gambar, maupun tombol) diperlakukan oleh browser sebagai sebuah kotak persegi panjang berlapis.
+Gunakan class (.nama-class) untuk elemen yang memiliki gaya berulang pada banyak tempat, dan gunakan ID (#nama-id) secara hemat khusus untuk elemen tunggal yang unik di halaman.$TAG_3$, 3),
+  (4, 1, "Konsep Box Model & Tata Letak Dasar", $TAG_4$Box Model adalah fondasi paling esensial dalam tata letak (layout) CSS. Setiap elemen HTML (baik teks, gambar, maupun tombol) diperlakukan oleh browser sebagai sebuah kotak persegi panjang berlapis.
 
 1. Empat Lapisan Box Model:
 • Content: Area aktual tempat teks atau media berada.
@@ -238,8 +241,137 @@ Mari kita amati contoh kodenya:
 ```
 
 3. Tips Mengingat Urutan Nilai Shorthand:
-Jika Anda menuliskan padding: 10px 20px 15px 5px;, urutannya selalu searah jarum jam: Atas (Top) → Kanan (Right) → Bawah (Bottom) → Kiri (Left) atau disingkat TRBL (Trouble).$, 4),
-  (9, 1, 'Flexbox & tata letak modern dengan CSS', $Menyusun elemen agar berjejer rapi ke samping atau berada tepat di tengah layar dahulu merupakan hal yang rumit. Dengan hadirnya CSS Flexbox (Flexible Box Layout), Anda dapat mengatur posisi, perataan, dan distribusi ruang antar-elemen dengan sangat mudah dan fleksibel.
+Jika Anda menuliskan padding: 10px 20px 15px 5px;, urutannya selalu searah jarum jam: Atas (Top) → Kanan (Right) → Bawah (Bottom) → Kiri (Left) atau disingkat TRBL (Trouble).$TAG_4$, 4),
+  (5, 2, "Mengapa Memilih Tailwind CSS?", $TAG_5$Tailwind CSS adalah framework CSS berparadigma utility-first yang telah merevolusi cara pengembang membangun antarmuka web modern. Di bab ini, kita akan mempelajari mengapa Tailwind sangat digemari dan bagaimana cara berpikir menggunakan utility classes.
+
+1. Masalah pada CSS Konvensional
+Pada CSS konvensional, setiap kali ingin membuat komponen baru, Anda harus memikirkan nama class unik (seperti .card-header-v2-container), berpindah ke file CSS terpisah, menulis aturan, lalu kembali ke HTML. Seiring berkembangnya proyek, file CSS akan terus membengkak dan sulit dirawat.
+
+2. Solusi Utility-First Tailwind CSS
+Tailwind menyediakan ribuan class utilitas siap pakai (seperti p-4 untuk padding, bg-teal-500 untuk warna latar, text-center untuk teks rata tengah). Anda langsung menyusun desain di dalam markup HTML tanpa meninggalkan file komponen.
+
+Perhatikan perbandingan langsung di bawah ini:
+
+```html
+<!-- PENULISAN KOMPONEN MENGGUNAKAN TAILWIND CSS -->
+<div class="max-w-md mx-auto p-6 bg-white border border-slate-200 rounded-2xl shadow-md space-y-4">
+  <div class="flex items-center justify-between">
+    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
+      Pemula
+    </span>
+    <span class="text-xs text-slate-500 font-medium">15 Menit</span>
+  </div>
+
+  <h3 class="text-xl font-bold text-slate-800 hover:text-teal-700 transition-colors">
+    Membangun Antarmuka Cepat dengan Utility Classes
+  </h3>
+
+  <p class="text-slate-600 text-sm leading-relaxed">
+    Anda tidak perlu lagi mengarang nama class buatan. Cukup gunakan class standar dari design system Tailwind.
+  </p>
+
+  <button class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl text-sm transition-all shadow-sm">
+    Mulai Latihan Sekarang
+  </button>
+</div>
+```
+
+3. Keuntungan Utama Tailwind CSS:
+• Kecepatan Pengembangan: Tidak perlu bolak-balik antar berkas HTML dan CSS.
+• Konsistensi Design System: Nilai padding, margin, font-size, dan palet warna sudah terstandarisasi.
+• Ukuran File Produksi Sangat Kecil: Compiler Tailwind hanya akan mengekspor class yang benar-benar Anda pakai di dalam proyek.$TAG_5$, 1),
+  (6, 2, "Layout Responsif: Mobile, Tablet, dan Desktop", $TAG_6$Lebih dari 60% pengguna internet menjelajahi web melalui perangkat seluler (smartphone). Oleh karena itu, prinsip desain Mobile-First bukan lagi pilihan, melainkan sebuah keharusan mutlak. Tailwind CSS dirancang dengan filosofi mobile-first secara default.
+
+1. Cara Kerja Breakpoint di Tailwind
+Class tanpa prefix (awalan) akan berlaku untuk semua ukuran layar (termasuk layar HP terkecil). Saat Anda ingin mengubah tampilan pada layar yang lebih lebar, gunakan prefix breakpoint:
+• sm: Berlaku pada layar >= 640px (Ponsel lanskap / tablet kecil)
+• md: Berlaku pada layar >= 768px (Tablet)
+• lg: Berlaku pada layar >= 1024px (Laptop & Desktop)
+• xl: Berlaku pada layar >= 1280px (Monitor Besar)
+
+2. Contoh Praktik Tata Letak Responsif:
+Mari kita buat sistem grid responsif yang secara otomatis mengubah susunan: 1 kolom di HP, 2 kolom di tablet, dan 3 kolom di laptop.
+
+```html
+<section class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+  <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6 text-center sm:text-left">
+    Katalog Modul Pembelajaran
+  </h2>
+
+  <!-- GRID RESPONSIF: 1 kolom (default HP) -> 2 kolom (md) -> 3 kolom (lg) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    
+    <!-- Item 1 -->
+    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
+      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
+        01
+      </div>
+      <h3 class="font-bold text-slate-800 text-base mb-1">Struktur HTML Semantik</h3>
+      <p class="text-xs text-slate-500">Mempelajari susunan tag standar dokumen web.</p>
+    </div>
+
+    <!-- Item 2 -->
+    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
+      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
+        02
+      </div>
+      <h3 class="font-bold text-slate-800 text-base mb-1">Styling Utility Tailwind</h3>
+      <p class="text-xs text-slate-500">Menerapkan tata warna dan spasi secara konsisten.</p>
+    </div>
+
+    <!-- Item 3 -->
+    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
+      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
+        03
+      </div>
+      <h3 class="font-bold text-slate-800 text-base mb-1">Publikasi & Optimasi</h3>
+      <p class="text-xs text-slate-500">Menyiapkan proyek untuk diunggah ke internet publik.</p>
+    </div>
+
+  </div>
+</section>
+```
+
+3. Aturan Emas Mobile-First:
+Jangan mendesain untuk desktop terlebih dahulu lalu mengecilkan elemen di HP. Mulailah menata konten untuk layar sempit, lalu gunakan md: atau lg: untuk melebarkan kolom dan menambah ruang saat layar bertambah luas.$TAG_6$, 2),
+  (7, 3, "Prinsip Dasar Desain Berpusat pada Pengguna (Human-Centered)", $TAG_7$Desain antarmuka (UI) dan pengalaman pengguna (UX) yang sukses berakar dari pemahaman mendalam tentang kebutuhan dan pola pikir manusia yang akan menggunakannya. Prinsip ini dikenal sebagai Human-Centered Design (Desain Berpusat pada Manusia).
+
+1. 5 Tahapan Utama Design Thinking:
+• Empathize (Empati): Memahami sudut pandang, kesulitan, dan rutinitas calon pengguna melalui observasi dan wawancara.
+• Define (Mendefinisikan Masalah): Merumuskan inti masalah yang benar-benar dirasakan pengguna, bukan sekadar asumsi pembuat produk.
+• Ideate (Curah Ide): Mengumpulkan berbagai alternatif solusi kreatif tanpa menghakimi ide di awal.
+• Prototype (Pembuatan Purwarupa): Mewujudkan ide ke dalam bentuk sketsa atau purwarupa visual yang nyata.
+• Test (Uji Coba): Menyerahkan purwarupa ke pengguna asli untuk melihat apakah solusi tersebut benar-benar mudah dipahami.
+
+2. Hukum Esensial UX (Laws of UX):
+• Jakob's Law: Pengguna menghabiskan sebagian besar waktunya di aplikasi lain. Oleh karena itu, aplikasi Anda sebaiknya bekerja dengan pola navigasi yang sudah akrab bagi mereka (misal: tombol keranjang belanja di kanan atas).
+• Hick's Law: Semakin banyak pilihan yang disajikan di layar, semakin lama waktu yang dibutuhkan pengguna untuk mengambil keputusan. Buat menu sesederhana mungkin!
+• Fitts's Law: Tombol aksi utama (CTA) harus berukuran cukup besar dan mudah dijangkau oleh jempol di layar sentuh.
+
+3. Kesimpulan:
+Estetika visual hanyalah kulit luar. Fondasi sejati dari produk digital yang dicintai jutaan orang adalah kemampuannya menyelesaikan masalah nyata dengan sesedikit mungkin kebingungan.$TAG_7$, 1),
+  (8, 3, "Merancang Wireframe & Arsitektur Informasi", $TAG_8$Sebelum menuangkan warna, tipografi mewah, dan ilustrasi rumit, seorang perancang produk digital selalu memulai dari Wireframe. Wireframe adalah cetak biru (blueprint) hitam-putih yang memetakan tata letak informasi.
+
+1. Mengapa Harus Mulai dari Wireframe?
+Banyak pemula tergoda langsung mendesain di Figma dengan warna warni. Akibatnya, saat struktur alur aplikasinya salah, mereka harus merombak seluruh desain yang memakan banyak waktu. Wireframe memungkinkan kita:
+• Menguji alur pengguna (user flow) dengan cepat.
+• Menentukan hierarki informasi mana yang paling penting di halaman.
+• Menghemat waktu revisi tim pengembang dan pemangku kepentingan (stakeholder).
+
+2. Tiga Tingkatan Wireframe:
+• Low-Fidelity (Sketsa Kertas): Coretan tangan menggunakan pensil dan kertas untuk mengeksplorasi susunan layout dalam 5–10 menit.
+• Mid-Fidelity: Gambar digital menggunakan kotak abu-abu, teks placeholder, dan penempatan tombol tanpa elemen warna/gaya.
+• High-Fidelity: Sudah mendekati tampilan aplikasi final lengkap dengan warna tema, gambar nyata, dan mikro-interaksi.
+
+3. Anatomi Halaman Web yang Baik:
+• Header / Top Bar: Identitas brand, menu navigasi utama, dan tombol aksi login/daftar.
+• Hero Section: Pesan nilai utama yang menjelaskan apa guna produk ini dalam 3 detik pertama.
+• Konten Inti / Fitur: Dikelompokkan dalam kartu-kartu terstruktur dengan ruang kosong (white space) yang lega.
+• Footer: Navigasi pendukung, tautan bantuan, dan hak cipta.
+
+Langkah Latihan Praktis:
+Ambil selembar kertas dan pulpen. Sketsakan antarmuka sebuah aplikasi pencari kursus dengan 1 hero section dan 3 kartu materi. Pastikan tombol utama terlihat paling mencolok dibanding elemen lain!$TAG_8$, 2),
+  (9, 1, "Flexbox & tata letak modern dengan CSS", $TAG_9$Menyusun elemen agar berjejer rapi ke samping atau berada tepat di tengah layar dahulu merupakan hal yang rumit. Dengan hadirnya CSS Flexbox (Flexible Box Layout), Anda dapat mengatur posisi, perataan, dan distribusi ruang antar-elemen dengan sangat mudah dan fleksibel.
 
 1. Konsep Flex Container dan Flex Items
 Untuk mengaktifkan Flexbox, Anda cukup memberikan deklarasi display: flex pada elemen induk (Flex Container). Secara otomatis, seluruh elemen anak di dalamnya (Flex Items) akan berbaris menyamping.
@@ -293,107 +425,325 @@ Berikut contoh pembuatan Navbar modern dan responsif:
 ```
 
 3. Kesimpulan:
-Flexbox adalah perkakas wajib bagi setiap web developer. Kuasai kombinasi display: flex, justify-content: space-between, dan align-items: center karena pola ini digunakan pada 90% komponen navigasi, kartu, dan formulir web modern.$, 5),
-  (5, 2, 'Mengapa Memilih Tailwind CSS?', $Tailwind CSS adalah framework CSS berparadigma utility-first yang telah merevolusi cara pengembang membangun antarmuka web modern. Di bab ini, kita akan mempelajari mengapa Tailwind sangat digemari dan bagaimana cara berpikir menggunakan utility classes.
+Flexbox adalah perkakas wajib bagi setiap web developer. Kuasai kombinasi display: flex, justify-content: space-between, dan align-items: center karena pola ini digunakan pada 90% komponen navigasi, kartu, dan formulir web modern.$TAG_9$, 5),
+  (10, 2, "Tipografi, Pewarnaan, & Desain Komponen", $TAG_10$Tipografi dan pewarnaan adalah dua aspek visual yang paling menentukan kenyamanan membaca dan identitas sebuah antarmuka web. Di bab ini, kita akan mempelajari bagaimana Tailwind CSS menyediakan skala tipografi dan palet warna yang sangat terstruktur.
 
-1. Masalah pada CSS Konvensional
-Pada CSS konvensional, setiap kali ingin membuat komponen baru, Anda harus memikirkan nama class unik (seperti .card-header-v2-container), berpindah ke file CSS terpisah, menulis aturan, lalu kembali ke HTML. Seiring berkembangnya proyek, file CSS akan terus membengkak dan sulit dirawat.
+1. Skala Ukuran Teks (Font Size)
+Tailwind menggunakan utility font size yang proporsional dengan line-height (jarak antar baris) bawaan:
+• text-xs: Ukuran 12px (biasanya untuk keterangan teks badge atau label kecil)
+• text-sm: Ukuran 14px (ukuran standar teks sekunder atau paragraf ringkas)
+• text-base: Ukuran 16px (ukuran default teks tubuh web modern)
+• text-lg: Ukuran 18px (sub-judul atau teks pengantar)
+• text-xl s.d. text-4xl: Digunakan untuk judul bab hingga heading utama artikel
 
-2. Solusi Utility-First Tailwind CSS
-Tailwind menyediakan ribuan class utilitas siap pakai (seperti p-4 untuk padding, bg-teal-500 untuk warna latar, text-center untuk teks rata tengah). Anda langsung menyusun desain di dalam markup HTML tanpa meninggalkan file komponen.
+2. Ketebalan Font (Font Weight)
+Gunakan class berikut untuk mengatur bobot teks:
+• font-normal (400)
+• font-medium (500)
+• font-semibold (600)
+• font-bold (700)
+• font-extrabold (800)
 
-Perhatikan perbandingan langsung di bawah ini:
+3. Palet Warna & Opasitas
+Tailwind menyediakan palet warna lengkap dengan tingkatan intensitas 50 hingga 950 (contoh: slate, teal, emerald, amber, rose).
+Anda dapat mewarnai teks menggunakan text-{warna}-{tingkat} (misal text-slate-800) dan latar belakang menggunakan bg-{warna}-{tingkat} (misal bg-teal-500).
+
+Contoh Penerapan Komponen Nyata:
 
 ```html
-<!-- PENULISAN KOMPONEN MENGGUNAKAN TAILWIND CSS -->
-<div class="max-w-md mx-auto p-6 bg-white border border-slate-200 rounded-2xl shadow-md space-y-4">
-  <div class="flex items-center justify-between">
-    <span class="px-3 py-1 rounded-full text-xs font-bold bg-teal-100 text-teal-800">
-      Pemula
-    </span>
-    <span class="text-xs text-slate-500 font-medium">15 Menit</span>
-  </div>
-
-  <h3 class="text-xl font-bold text-slate-800 hover:text-teal-700 transition-colors">
-    Membangun Antarmuka Cepat dengan Utility Classes
+<div class="max-w-md p-6 bg-white rounded-2xl border border-slate-200 shadow-sm space-y-3">
+  <span class="text-xs font-bold uppercase tracking-wider text-teal-700 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+    Tipografi Modern
+  </span>
+  <h3 class="text-xl font-extrabold text-slate-900 leading-snug">
+    Mengatur Hirarki Visual dengan Tailwind CSS
   </h3>
-
-  <p class="text-slate-600 text-sm leading-relaxed">
-    Anda tidak perlu lagi mengarang nama class buatan. Cukup gunakan class standar dari design system Tailwind.
+  <p class="text-sm text-slate-600 leading-relaxed">
+    Kontras warna teks yang tepat antara judul utama yang tegas (slate-900) dan paragraf pendukung yang lembut (slate-600) membuat mata pembaca tidak cepat lelah.
   </p>
-
-  <button class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl text-sm transition-all shadow-sm">
-    Mulai Latihan Sekarang
-  </button>
 </div>
 ```
 
-3. Keuntungan Utama Tailwind CSS:
-• Kecepatan Pengembangan: Tidak perlu bolak-balik antar berkas HTML dan CSS.
-• Konsistensi Design System: Nilai padding, margin, font-size, dan palet warna sudah terstandarisasi.
-• Ukuran File Produksi Sangat Kecil: Compiler Tailwind hanya akan mengekspor class yang benar-benar Anda pakai di dalam proyek.$, 1),
-  (6, 2, 'Layout Responsif: Mobile, Tablet, dan Desktop', $Lebih dari 60% pengguna internet menjelajahi web melalui perangkat seluler (smartphone). Oleh karena itu, prinsip desain Mobile-First bukan lagi pilihan, melainkan sebuah keharusan mutlak. Tailwind CSS dirancang dengan filosofi mobile-first secara default.
+4. Tips Aksesibilitas Tipografi:
+Selalu pastikan kontras antara warna teks dan warna latar belakang cukup kontras (rasio minimal 4.5:1 untuk teks normal) agar tulisan Anda mudah dibaca oleh seluruh kalangan pengguna.$TAG_10$, 3),
+  (11, 2, "Interaktivitas Komponen & Animasi Transisi", $TAG_11$Interaktivitas adalah hal yang membedakan web modern dari dokumen statis. Di bab ini, kita akan mempelajari interaksi komponen dengan state pseudo-class seperti hover, focus, dan animasi transisi halus.
 
-1. Cara Kerja Breakpoint di Tailwind
-Class tanpa prefix (awalan) akan berlaku untuk semua ukuran layar (termasuk layar HP terkecil). Saat Anda ingin mengubah tampilan pada layar yang lebih lebar, gunakan prefix breakpoint:
-• sm: Berlaku pada layar >= 640px (Ponsel lanskap / tablet kecil)
-• md: Berlaku pada layar >= 768px (Tablet)
-• lg: Berlaku pada layar >= 1024px (Laptop & Desktop)
-• xl: Berlaku pada layar >= 1280px (Monitor Besar)
+1. State Hover dan Active
+Tambahkan prefix hover: di depan utility apa saja untuk mengubah tampilannya saat kursor mouse melayang di atas elemen:
+• hover:bg-teal-600: Mengubah warna tombol saat di-hover.
+• hover:scale-105: Membesarkan ukuran elemen sedikit untuk efek sentuhan fisik.
+• hover:shadow-lg: Menambah kedalaman bayangan (elevasi).
 
-2. Contoh Praktik Tata Letak Responsif:
-Mari kita buat sistem grid responsif yang secara otomatis mengubah susunan: 1 kolom di HP, 2 kolom di tablet, dan 3 kolom di laptop.
+2. Transisi Halus (Smooth Transitions)
+Jangan biarkan perubahan state terjadi secara mendadak dan kaku. Selalu sertakan class transisi:
+• transition-all atau transition-colors
+• duration-200 atau duration-300 (durasi 200–300 milidetik adalah standar emas kenyamanan visual)
+
+Contoh Pembuatan Tombol Interaktif Profesional:
 
 ```html
-<section class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
-  <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-6 text-center sm:text-left">
-    Katalog Modul Pembelajaran
-  </h2>
-
-  <!-- GRID RESPONSIF: 1 kolom (default HP) -> 2 kolom (md) -> 3 kolom (lg) -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    
-    <!-- Item 1 -->
-    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
-      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
-        01
-      </div>
-      <h3 class="font-bold text-slate-800 text-base mb-1">Struktur HTML Semantik</h3>
-      <p class="text-xs text-slate-500">Mempelajari susunan tag standar dokumen web.</p>
-    </div>
-
-    <!-- Item 2 -->
-    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
-      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
-        02
-      </div>
-      <h3 class="font-bold text-slate-800 text-base mb-1">Styling Utility Tailwind</h3>
-      <p class="text-xs text-slate-500">Menerapkan tata warna dan spasi secara konsisten.</p>
-    </div>
-
-    <!-- Item 3 -->
-    <div class="p-5 bg-white border border-slate-200 rounded-xl shadow-xs">
-      <div class="w-10 h-10 rounded-lg bg-teal-100 text-teal-700 flex items-center justify-center font-bold mb-3">
-        03
-      </div>
-      <h3 class="font-bold text-slate-800 text-base mb-1">Publikasi & Optimasi</h3>
-      <p class="text-xs text-slate-500">Menyiapkan proyek untuk diunggah ke internet publik.</p>
-    </div>
-
-  </div>
-</section>
+<button class="px-6 py-3 bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-teal-200 cursor-pointer">
+  Simpan Perubahan
+</button>
 ```
 
-3. Aturan Emas Mobile-First:
-Jangan mendesain untuk desktop terlebih dahulu lalu mengecilkan elemen di HP. Mulailah menata konten untuk layar sempit, lalu gunakan md: atau lg: untuk melebarkan kolom dan menambah ruang saat layar bertambah luas.$, 2),
-  (7, 3, 'Prinsip Dasar Desain Ramah Manusia', $Desain yang baik bukan hanya tentang estetika, melainkan bagaimana produk tersebut mempermudah manusia menyelesaikan tugasnya secara menyenangkan.$, 1),
-  (8, 3, 'Membuat Wireframe Sederhana', $Pelajari cara membuat sketsa tata letak hitam-putih berfokus pada hierarki informasi sebelum masuk ke tahap warna.$, 2)
+3. Ringkasan:
+Kombinasi transisi yang halus dan state hover yang responsif memberikan umpan balik (feedback) langsung kepada pengguna bahwa elemen tersebut siap untuk diklik.$TAG_11$, 4),
+  (12, 3, "Prinsip Aksesibilitas & Komponen Desain Nyata", $TAG_12$Aksesibilitas (Accessibility / a11y) dan sistem desain adalah jaminan bahwa aplikasi Anda dapat digunakan dengan nyaman oleh semua orang, termasuk mereka yang memiliki keterbatasan fisik, penglihatan, atau berada di bawah terik sinar matahari.
+
+1. Kontras Warna yang Nyaman
+Pastikan kontras antara teks dan warna background memiliki rasio yang memadai. Teks abu-abu muda di atas background putih adalah contoh klasik UX buruk yang membuat mata pengguna lelah. Gunakan warna abu-abu gelap (#1E293B atau #334155) untuk teks tubuh.
+
+2. Ukuran Target Ketukan (Touch Targets)
+Pada perangkat mobile, jari manusia memiliki luas sentuhan sekitar 7–10 mm. Standar desain modern mewajibkan:
+• Tombol atau link yang dapat diklik memiliki ukuran minimal 44 x 44 piksel.
+• Memberikan jarak (gap) yang cukup antar tombol agar tidak terjadi salah tekan (fat-finger error).
+
+3. Umpan Balik Status Interaksi (States):
+Setiap komponen yang bisa diklik harus memiliki 4 kondisi status yang jelas:
+• Default: Tampilan normal saat pertama dilihat.
+• Hover: Berubah sedikit saat kursor melayang.
+• Pressed/Active: Terlihat sedikit tertekan saat disentuh.
+• Disabled: Terlihat memudar saat aksi belum memenuhi syarat.
+
+Dengan memadukan empati riset, wireframe yang rapi, dan kepatuhan pada aksesibilitas, Anda siap merancang produk digital kelas dunia!$TAG_12$, 3),
+  (13, 4, "Pengenalan Python & Lingkungan Sains Data", $TAG_13$Selamat datang di Kursus Analisis Data dengan Python! Python saat ini merupakan bahasa pemrograman paling populer di dunia untuk ilmu data (Data Science), kecerdasan buatan (AI), dan otomatisasi pengolahan data.
+
+1. Mengapa Memilih Python untuk Data?
+• Sintaks Bahasa Manusiawi: Kode Python sangat bersih, mudah dibaca, dan ringkas dibandingkan C++ atau Java.
+• Ekosistem Pustaka (Library) Terlengkap: Didukung oleh NumPy (komputasi numerik), Pandas (manipulasi tabel data), dan Matplotlib/Seaborn (visualisasi data).
+• Dukungan Komunitas Global: Solusi atas setiap kendala dapat ditemukan dengan mudah.
+
+2. Tipe Data Fundamental di Python:
+• Integer & Float: Untuk angka bulat (contoh: 25) dan desimal (contoh: 87.5).
+• String: Untuk teks (contoh: "KursusDeh").
+• List: Kumpulan data berurutan yang dapat diubah nilainya (contoh: [80, 90, 75, 95]).
+• Dictionary: Pasangan kunci dan nilai (contoh: {"nama": "Andi", "nilai": 95}).
+
+Contoh Kode Python Sederhana:
+
+```python
+# Menghitung rata-rata nilai siswa
+daftar_nilai = [85, 90, 78, 92, 88]
+
+total = sum(daftar_nilai)
+jumlah_siswa = len(daftar_nilai)
+rata_rata = total / jumlah_siswa
+
+print(f"Total Nilai: {total}")
+print(f"Rata-rata Nilai Kelas: {rata_rata:.2f}")
+
+# Percabangan logika
+if rata_rata >= 80:
+    print("Predikat Kelas: Sangat Baik")
+else:
+    print("Predikat Kelas: Perlu Peningkatan")
+```
+
+3. Lingkungan Kerja Analisis Data:
+Dalam dunia profesional, praktisi data banyak menggunakan Jupyter Notebook atau Google Colaboratory karena memungkinkan kita menjalankan kode per-sel blok sambil melihat tabel dan grafik secara instan.$TAG_13$, 1),
+  (14, 4, "Manipulasi Tabel Data Menggunakan Pandas", $TAG_14$Pandas adalah pustaka Python yang paling krusial bagi seorang data analyst. Jika Anda terbiasa menggunakan Microsoft Excel atau Google Sheets, anggaplah Pandas sebagai spreadsheet canggih berbasis kode yang mampu memproses jutaan baris data dalam hitungan detik.
+
+1. Dua Struktur Data Inti di Pandas:
+• Series: Kolom tunggal data 1 dimensi (seperti satu kolom di Excel).
+• DataFrame: Tabel data 2 dimensi lengkap dengan baris dan kolom yang memiliki label nama.
+
+2. Membaca dan Menginspeksi Data:
+
+```python
+import pandas as pd
+
+# 1. Membuat DataFrame dari kamus data
+data = {
+    "Nama": ["Andi", "Budi", "Dewi", "Rudi", "Siti"],
+    "Kota": ["Jakarta", "Surabaya", "Bandung", "Medan", "Jakarta"],
+    "Nilai_Ujian": [85, 78, 92, 65, 89],
+    "Status_Lulus": [True, True, True, False, True]
+}
+
+df = pd.DataFrame(data)
+
+# 2. Perintah Inspeksi Data Paling Penting:
+print("--- 5 Baris Pertama ---")
+print(df.head())
+
+print("
+--- Ringkasan Statistik Angka ---")
+print(df.describe())
+
+print("
+--- Informasi Tipe Data Kolom ---")
+print(df.info())
+```
+
+3. Memfilter dan Memilih Data:
+```python
+# Memfilter siswa yang nilainya di atas 80
+siswa_unggul = df[df["Nilai_Ujian"] > 80]
+print(siswa_unggul[["Nama", "Nilai_Ujian"]])
+
+# Menghitung rata-rata nilai per kota
+rata_per_kota = df.groupby("Kota")["Nilai_Ujian"].mean()
+print(rata_per_kota)
+```
+
+Dengan beberapa baris kode Pandas di atas, Anda sudah bisa melakukan agregasi dan penyaringan data yang kompleks secara otomatis.$TAG_14$, 2),
+  (15, 4, "Teknik Pembersihan Data (Data Cleaning)", $TAG_15$Dalam kenyataan di lapangan, data mentah yang kita terima dari survei, sensor, atau database hampir tidak pernah 100% bersih. Seringkali terdapat data kosong (missing values), data duplikat, atau format teks yang berantakan.
+
+1. Menemukan Data Kosong (NaN / Null)
+Langkah pertama adalah memeriksa berapa banyak sel kosong di setiap kolom:
+
+```python
+import pandas as pd
+import numpy as np
+
+# Simulasi data mentah yang kotor
+raw_data = {
+    "Produk": ["Laptop", "Mouse", "Keyboard", "Monitor", "Mouse"],
+    "Harga": [8500000, 150000, np.nan, 2100000, 150000],
+    "Terjual": [12, np.nan, 34, 8, 12]
+}
+
+df = pd.DataFrame(raw_data)
+
+# Memeriksa jumlah nilai kosong
+print(df.isnull().sum())
+```
+
+2. Strategi Menangani Data Kosong:
+• Menghapus Baris Kosong (`df.dropna()`): Cocok jika jumlah data yang hilang sangat sedikit dan tidak mempengaruhi kesimpulan.
+• Mengisi Nilai Kosong (`df.fillna()` / Imputasi): Mengisi sel kosong dengan nilai rata-rata (mean), median, atau nilai default seperti 0.
+
+```python
+# Mengisi harga kosong dengan median harga produk
+median_harga = df["Harga"].median()
+df["Harga"] = df["Harga"].fillna(median_harga)
+
+# Mengisi jumlah terjual kosong dengan angka 0
+df["Terjual"] = df["Terjual"].fillna(0)
+```
+
+3. Menghapus Data Duplikat:
+Data pencatatan ganda sering terjadi saat sistem input bermasalah:
+```python
+# Menghapus baris yang identik kembar
+df = df.drop_duplicates()
+print(df)
+```
+
+Data yang bersih adalah syarat mutlak sebelum melangkah ke tahap visualisasi grafik dan pemodelan prediktif.$TAG_15$, 3),
+  (16, 4, "Visualisasi Data Grafis dengan Matplotlib & Seaborn", $TAG_16$Grafik visual bernilai seribu kata. Kemampuan menyajikan temuan data ke dalam bentuk visualisasi yang jelas dan mudah dipahami oleh orang non-teknis adalah keterampilan utama seorang Data Analyst.
+
+1. Matplotlib & Seaborn
+• Matplotlib: Pustaka dasar visualisasi grafik di Python yang sangat fleksibel.
+• Seaborn: Pustaka tingkat tinggi berbasis Matplotlib yang menghasilkan grafik modern dan estetis dengan sedikit baris kode.
+
+2. Memilih Jenis Grafik yang Tepat:
+• Diagram Batang (Bar Chart): Menampilkan perbandingan antar kategori (misal: total penjualan per cabang).
+• Diagram Garis (Line Chart): Menampilkan tren pergerakan nilai sepanjang waktu (time series).
+• Histogram: Menampilkan sebaran frekuensi data (distribusi normal, kemiringan).
+• Diagram Sebar (Scatter Plot): Menemukan korelasi atau hubungan antara dua variabel angka.
+
+Contoh Kode Pembuatan Visualisasi:
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Data kursus populer
+kategori = ['Web Dev', 'UI/UX', 'Data Science', 'Bahasa', 'Bisnis']
+jumlah_siswa = [1420, 890, 1150, 620, 480]
+
+# Mengatur ukuran kanvas grafik
+plt.figure(figsize=(8, 5))
+
+# Membuat diagram batang dengan warna elegan
+sns.barplot(x=kategori, y=jumlah_siswa, palette="viridis")
+
+# Memberikan judul dan label sumbu
+plt.title("Distribusi Minat Siswa per Kategori Kursus - KursusDeh", fontsize=14, fontweight='bold')
+plt.xlabel("Kategori Pembelajaran", fontsize=11)
+plt.ylabel("Total Siswa Terdaftar", fontsize=11)
+
+# Menampilkan grid horizontal halus
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+# Menyimpan grafik sebagai gambar
+plt.tight_layout()
+plt.savefig("grafik_kursusdeh.png", dpi=300)
+plt.show()
+```
+
+Selamat! Anda telah menguasai alur kerja hulu ke hilir seorang praktisi data: Mulai dari memahami Python dasar, mengolah tabel dengan Pandas, membersihkan data kotor, hingga meracik grafik visual yang siap dipresentasikan.$TAG_16$, 4),
+  (17, 5, "Percakapan Perkenalan & Memulai Obrolan Santai (Small Talk)", $TAG_17$Welcome to Everyday English Conversation! Di bab pertama ini, kita akan membongkar rasa ragu dan gugup saat harus memulai percakapan bahasa Inggris dalam situasi perkenalan dan obrolan santai (small talk).
+
+1. Pola Dasar Memperkenalkan Diri (Self-Introduction):
+Alih-alih hanya mengucapkan "My name is...", berikut pola natural yang biasa digunakan:
+• Formal / Profesional: "Good morning, everyone. My name is [Nama], and I am currently working as a [Profesi] at [Instansi/Perusahaan]."
+• Santai / Kasual: "Hi there! I'm [Nama]. It's really great to meet you all."
+
+2. Menanyakan Kabar & Pertanyaan Pemecah Keheningan (Icebreakers):
+Jangan hanya terpaku pada "How are you? I'm fine thank you". Variasikan dengan kalimat berikut:
+• "How's your day going so far?" (Bagaimana harimu berjalan sejauh ini?)
+• "What brings you here today?" (Apa yang membawamu ke acara ini hari ini?)
+• "Have you tried the coffee here? It's really good!" (Sudah coba kopinya? Enak lho!)
+
+Contoh Dialog Praktik:
+Alex: "Hi, excuse me. Is anyone sitting here?"
+Sarah: "No, it's free. Please, have a seat!"
+Alex: "Thanks! By the way, I'm Alex. I'm attending the web development workshop."
+Sarah: "Nice to meet you, Alex. I'm Sarah, a graphic design student. Are you finding the workshop helpful?"
+Alex: "Absolutely! The mentor explains everything very clearly."
+
+3. Tips Percaya Diri:
+Fokuslah pada kelancaran komunikasi dan pesan yang ingin Anda sampaikan, bukan pada ketakutan salah tata bahasa (grammar). Penutur asli sangat menghargai usaha Anda untuk berkomunikasi!$TAG_17$, 1),
+  (18, 5, "Memesan Makanan & Menanyakan Petunjuk Arah", $TAG_18$Saat bepergian ke luar negeri atau berinteraksi di lingkungan wisata internasional, kemampuan memesan makanan di kafe/restoran serta menanyakan petunjuk arah jalan adalah keterampilan paling praktis yang wajib Anda kuasai.
+
+1. Ungkapan Sopan Memesan Makanan di Restoran:
+Gunakan "I would like..." atau "Could I please have..." agar terdengar sopan dan santun:
+• "Excuse me, could we have the menu, please?" (Permisi, boleh minta buku menunya?)
+• "I'd like to order a chicken steak with mashed potatoes, please." (Saya ingin memesan steak ayam dengan kentang tumbuk.)
+• "Does this dish contain any peanuts? I have an allergy." (Apakah hidangan ini mengandung kacang? Saya ada alergi.)
+• "Could we get the bill, please?" (Boleh minta tagihannya?)
+
+2. Menanyakan Petunjuk Arah (Asking for Directions):
+• "Excuse me, could you tell me how to get to the central station?" (Permisi, bisakah Anda beritahu arah ke stasiun pusat?)
+• "Is the National Museum within walking distance from here?" (Apakah Museum Nasional bisa dicapai dengan jalan kaki dari sini?)
+
+Kata Kunci Petunjuk Arah:
+• Go straight ahead: Jalan lurus terus
+• Turn left / Turn right: Belok kiri / Belok kanan
+• It's on your left / right: Letaknya di sebelah kiri / kanan Anda
+• Across the street: Di seberang jalan
+• Next to the convenience store: Di sebelah minimarket
+
+Latihan Mandiri:
+Cobalah ucapkan dengan lantang pesanan menu makan siang favorit Anda dalam bahasa Inggris menggunakan pola "Could I have [makanan], and a glass of [minuman], please?"$TAG_18$, 2),
+  (19, 5, "Komunikasi Profesional & Diskusi Tim dalam Pekerjaan", $TAG_19$Dalam dunia karir global dan kerja jarak jauh (remote work), komunikasi profesional saat rapat (meeting), menyampaikan gagasan, dan menyetujui atau menolak ide rekan kerja membutuhkan tata bahasa yang diplomatis dan konstruktif.
+
+1. Menyampaikan Opini atau Gagasan:
+• "From my perspective, focusing on mobile user experience will increase our conversion rate." (Dari sudut pandang saya, fokus pada kenyamanan pengguna mobile akan meningkatkan transaksi kita.)
+• "I believe we should prioritize fixing the database performance before launching the new feature." (Saya yakin kita sebaiknya mendahulukan performa database sebelum meluncurkan fitur baru.)
+
+2. Menyetujui dan Mendukung Ide:
+• "I completely agree with that point." (Saya sangat setuju dengan poin tersebut.)
+• "That makes a lot of sense. Let's proceed with that approach." (Itu sangat masuk akal. Mari kita lanjutkan dengan pendekatan tersebut.)
+
+3. Menolak atau Berbeda Pendapat Secara Santun (Polite Disagreement):
+Hindari mengatakan "You are wrong". Gunakan teknik diplomatis:
+• "I see your point, but have we considered the extra server cost?" (Saya paham poin Anda, namun apakah kita sudah mempertimbangkan biaya server tambahan?)
+• "I'm not quite sure that will work in our current timeline. How about we try a simpler alternative first?" (Saya kurang yakin hal itu bisa selesai tepat waktu. Bagaimana jika kita coba alternatif yang lebih sederhana terlebih dahulu?)
+
+4. Menyimpulkan dan Tindak Lanjut:
+• "To sum up, our next action item is to finalize the design prototype by Friday." (Sebagai kesimpulan, tugas kita berikutnya adalah menyelesaikan purwarupa desain pada hari Jumat.)
+
+Congratulations! Anda telah mempelajari keterampilan percakapan esensial dari perkenalan sosial, situasi perjalanan praktis, hingga komunikasi profesional di lingkungan kerja.$TAG_19$, 3)
 ON CONFLICT (id) DO UPDATE SET 
   title = EXCLUDED.title,
   content = EXCLUDED.content,
   order_number = EXCLUDED.order_number;
 
-ALTER SEQUENCE materials_id_seq RESTART WITH 10;
+ALTER SEQUENCE materials_id_seq RESTART WITH 25;
 
 -- 5. Pendaftaran Siswa (Enrollments)
 INSERT INTO enrollments (id, student_id, course_id, enrolled_at)
