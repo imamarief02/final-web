@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BookOpen, Heart, ShieldCheck } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 
 export default function Footer({ user: propUser = null }) {
   const pathname = usePathname();
@@ -45,12 +45,8 @@ export default function Footer({ user: propUser = null }) {
               </span>
             </div>
             <p className="text-teal-100/80 text-xs leading-relaxed max-w-sm">
-              Platform kursus online terstruktur dan ramah segala usia. Belajar materi bertahap dengan pengajar terverifikasi.
+              Platform kursus daring terstruktur untuk mendukung pembelajaran interaktif antara guru dan siswa.
             </p>
-            <div className="flex items-center gap-1.5 text-[11px] text-teal-300/80">
-              <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-              <span>Aksesibel WCAG 2.1 Level AA</span>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -142,10 +138,8 @@ export default function Footer({ user: propUser = null }) {
           <div>
             &copy; {new Date().getFullYear()} KursusDeh. Seluruh hak cipta dilindungi undang-undang.
           </div>
-          <div className="flex items-center gap-1">
-            <span>Dirancang dengan</span>
-            <Heart className="w-3 h-3 text-rose-400 fill-rose-400 inline" />
-            <span>untuk pembelajaran inklusif di Indonesia</span>
+          <div>
+            Belajar Langkah Demi Langkah
           </div>
         </div>
       </div>
