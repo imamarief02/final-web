@@ -8,9 +8,10 @@ export async function GET() {
     if (error) return NextResponse.json({ error }, { status });
 
     const sql = `
-      SELECT c.id, c.title, c.slug, c.level, c.status, c.created_at,
+      SELECT c.id, c.title, c.slug, c.description, c.thumbnail_url, c.level, c.status,
+             c.start_date, c.end_date, c.teacher_id, c.category_id, c.created_at, c.updated_at,
              u.name AS teacher_name, u.email AS teacher_email,
-             cat.name AS category_name,
+             cat.name AS category_name, cat.id AS cat_id,
              COUNT(DISTINCT e.id)::int AS student_count,
              COUNT(DISTINCT m.id)::int AS material_count
       FROM courses c
@@ -18,7 +19,7 @@ export async function GET() {
       JOIN categories cat ON c.category_id = cat.id
       LEFT JOIN enrollments e ON c.id = e.course_id
       LEFT JOIN materials m ON c.id = m.course_id
-      GROUP BY c.id, u.name, u.email, cat.name
+      GROUP BY c.id, u.name, u.email, cat.name, cat.id
       ORDER BY c.created_at DESC
     `;
 

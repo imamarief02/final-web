@@ -56,6 +56,21 @@ export async function POST(request, { params }) {
       );
     }
 
+    // Cek apakah kursus sudah memiliki materi
+    const firstMaterialRes = await query(
+      `SELECT order_number FROM materials WHERE course_id = $1 ORDER BY order_number ASC LIMIT 1`,
+      [course.id]
+    );
+
+    if (firstMaterialRes.rows.length === 0) {
+      return NextResponse.json(
+        { error: 'Kursus ini belum memiliki materi pembelajaran. Pendaftaran belum dibuka.' },
+        { status: 400 }
+      );
+    }
+
+    const firstOrderNumber = firstMaterialRes.rows[0].order_number;
+
     // Simpan pendaftaran
     const enrollRes = await query(
       `INSERT INTO enrollments (student_id, course_id)
@@ -63,14 +78,6 @@ export async function POST(request, { params }) {
        RETURNING id, enrolled_at`,
       [user.id, course.id]
     );
-
-    // Ambil materi pertama
-    const firstMaterialRes = await query(
-      `SELECT order_number FROM materials WHERE course_id = $1 ORDER BY order_number ASC LIMIT 1`,
-      [course.id]
-    );
-
-    const firstOrderNumber = firstMaterialRes.rows.length > 0 ? firstMaterialRes.rows[0].order_number : 1;
 
     return NextResponse.json(
       {

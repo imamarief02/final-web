@@ -23,7 +23,17 @@ export async function PUT(request, { params }) {
       );
     }
 
-    const { title, description, categoryId, level, thumbnailUrl, status: courseStatus } = await request.json();
+    const {
+      title,
+      description,
+      categoryId,
+      level,
+      thumbnailUrl,
+      status: courseStatus,
+      startDate,
+      endDate,
+      teacherId,
+    } = await request.json();
 
     if (level && !['pemula', 'menengah', 'lanjutan'].includes(level)) {
       return NextResponse.json(
@@ -56,6 +66,34 @@ export async function PUT(request, { params }) {
       );
     }
 
+    // Validasi Rentang Waktu Kursus (Jika diisi)
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+        return NextResponse.json(
+          { error: 'Format tanggal mulai atau tanggal selesai tidak valid.' },
+          { status: 400 }
+        );
+      }
+      if (start > end) {
+        return NextResponse.json(
+          { error: 'Tanggal mulai tidak boleh lebih akhir daripada tanggal selesai kursus.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Jika admin mengubah guru pengajar
+    let newTeacherId = checkRes.rows[0].teacher_id;
+    if (user.role === 'admin' && teacherId) {
+      const parsedTeacherId = parseInt(teacherId, 10);
+      const tCheck = await query(`SELECT id FROM users WHERE id = $1 AND role IN ('teacher', 'admin')`, [parsedTeacherId]);
+      if (tCheck.rows.length > 0) {
+        newTeacherId = parsedTeacherId;
+      }
+    }
+
     const updateRes = await query(
       `UPDATE courses
        SET title = COALESCE($1, title),
@@ -64,9 +102,12 @@ export async function PUT(request, { params }) {
            level = COALESCE($4, level),
            thumbnail_url = COALESCE($5, thumbnail_url),
            status = COALESCE($6, status),
+           start_date = $7,
+           end_date = $8,
+           teacher_id = $9,
            updated_at = NOW()
-       WHERE id = $7
-       RETURNING id, title, slug, status, updated_at`,
+       WHERE id = $10
+       RETURNING id, teacher_id, category_id, title, slug, level, status, start_date, end_date, updated_at`,
       [
         title ? title.trim() : null,
         description ? description.trim() : null,
@@ -74,6 +115,9 @@ export async function PUT(request, { params }) {
         level || null,
         thumbnailUrl !== undefined ? thumbnailUrl : null,
         courseStatus || null,
+        startDate !== undefined ? (startDate || null) : null,
+        endDate !== undefined ? (endDate || null) : null,
+        newTeacherId,
         courseId,
       ]
     );
@@ -100,7 +144,6 @@ export async function DELETE(request, { params }) {
     const { user, error, status } = await requireRole(['teacher', 'admin']);
     if (error) return NextResponse.json({ error }, { status });
 
-    // Cek kepemilikan kursus (BR-02)
     const checkRes = await query(`SELECT id, teacher_id FROM courses WHERE id = $1`, [courseId]);
     if (checkRes.rows.length === 0) {
       return NextResponse.json({ error: 'Kursus tidak ditemukan.' }, { status: 404 });

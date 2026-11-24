@@ -9,8 +9,8 @@ export async function GET(request, { params }) {
     // Ambil data kursus beserta guru dan kategori
     const courseRes = await query(
       `SELECT c.id, c.teacher_id, c.category_id, c.title, c.slug, c.description, c.thumbnail_url,
-              c.level, c.status, c.created_at, c.updated_at,
-              u.name AS teacher_name, u.bio AS teacher_bio, u.avatar_url AS teacher_avatar,
+              c.level, c.status, c.start_date, c.end_date, c.created_at, c.updated_at,
+              u.name AS teacher_name, u.email AS teacher_email, u.bio AS teacher_bio, u.avatar_url AS teacher_avatar,
               cat.name AS category_name, cat.slug AS category_slug,
               COUNT(DISTINCT e.id)::int AS student_count
        FROM courses c
@@ -18,7 +18,7 @@ export async function GET(request, { params }) {
        JOIN categories cat ON c.category_id = cat.id
        LEFT JOIN enrollments e ON c.id = e.course_id
        WHERE c.slug = $1
-       GROUP BY c.id, u.name, u.bio, u.avatar_url, cat.name, cat.slug`,
+       GROUP BY c.id, u.name, u.email, u.bio, u.avatar_url, cat.name, cat.slug`,
       [slug]
     );
 

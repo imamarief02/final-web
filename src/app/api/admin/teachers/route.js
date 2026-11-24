@@ -52,13 +52,30 @@ export async function PATCH(request) {
       );
     }
 
-    const updateRes = await query(
-      `UPDATE users
-       SET teacher_status = $1
-       WHERE id = $2 AND role = 'teacher'
-       RETURNING id, name, email, role, teacher_status`,
-      [newStatus, teacherId]
-    );
+    let sql = '';
+    let params = [];
+
+    if (newStatus === 'approved') {
+      sql = `
+        UPDATE users
+        SET teacher_status = 'approved',
+            role = 'teacher',
+            approved_at = NOW()
+        WHERE id = $1
+        RETURNING id, name, email, role, teacher_status, approved_at
+      `;
+      params = [teacherId];
+    } else {
+      sql = `
+        UPDATE users
+        SET teacher_status = $1
+        WHERE id = $2
+        RETURNING id, name, email, role, teacher_status, approved_at
+      `;
+      params = [newStatus, teacherId];
+    }
+
+    const updateRes = await query(sql, params);
 
     if (updateRes.rows.length === 0) {
       return NextResponse.json(

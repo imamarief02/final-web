@@ -14,7 +14,10 @@ export async function GET() {
              cat.name AS category_name,
              COUNT(DISTINCT m.id)::int AS total_materials,
              COUNT(DISTINCT mp.id) FILTER (WHERE mp.is_completed = TRUE)::int AS completed_materials,
-             cert.certificate_code
+             cert.certificate_code,
+             (SELECT MIN(order_number) FROM materials WHERE course_id = c.id AND id NOT IN (
+               SELECT material_id FROM material_progress WHERE enrollment_id = e.id AND is_completed = TRUE
+             )) AS next_order
       FROM enrollments e
       JOIN courses c ON e.course_id = c.id
       JOIN users u ON c.teacher_id = u.id
@@ -36,6 +39,7 @@ export async function GET() {
       return {
         ...row,
         progress_percentage: percentage,
+        next_order: row.next_order || 1,
       };
     });
 
