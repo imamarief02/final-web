@@ -214,7 +214,7 @@ export default function StudentDashboardPage() {
                     {/* Actions */}
                     <div className="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
                       <Link
-                        href={`/learn/${c.slug}/1`}
+                        href={`/learn/${c.slug}/${c.next_order || 1}`}
                         className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl text-sm transition-all"
                       >
                         <PlayCircle className="w-4 h-4" />

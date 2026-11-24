@@ -19,6 +19,8 @@ import {
   FileText,
   ChevronRight,
   ShieldAlert,
+  Calendar,
+  X,
 } from 'lucide-react';
 
 export default function TeacherDashboardPage() {
@@ -42,6 +44,8 @@ export default function TeacherDashboardPage() {
     level: 'pemula',
     thumbnailUrl: '',
     status: 'draft',
+    startDate: '',
+    endDate: '',
   });
   const [courseFormError, setCourseFormError] = useState('');
   const [isSavingCourse, setIsSavingCourse] = useState(false);
@@ -58,6 +62,18 @@ export default function TeacherDashboardPage() {
   });
   const [materialFormError, setMaterialFormError] = useState('');
   const [isSavingMaterial, setIsSavingMaterial] = useState(false);
+
+  // Kunci scroll halaman belakang saat modal sedang terbuka
+  useEffect(() => {
+    if (showCourseModal || showMaterialModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showCourseModal, showMaterialModal]);
 
   const refreshData = async () => {
     try {
@@ -154,11 +170,48 @@ export default function TeacherDashboardPage() {
     loadMaterials();
   }, [selectedCourseForMat]);
 
+  const handleOpenCourseModal = (course = null) => {
+    setCourseFormError('');
+    if (course) {
+      setEditingCourseId(course.id);
+      setCourseForm({
+        title: course.title,
+        description: course.description || '',
+        categoryId: course.category_id || '',
+        level: course.level || 'pemula',
+        thumbnailUrl: course.thumbnail_url || '',
+        status: course.status || 'draft',
+        startDate: course.start_date ? course.start_date.slice(0, 10) : '',
+        endDate: course.end_date ? course.end_date.slice(0, 10) : '',
+      });
+    } else {
+      setEditingCourseId(null);
+      setCourseForm({
+        title: '',
+        description: '',
+        categoryId: categories[0]?.id || '',
+        level: 'pemula',
+        thumbnailUrl: '',
+        status: 'draft',
+        startDate: '',
+        endDate: '',
+      });
+    }
+    setShowCourseModal(true);
+  };
+
   // Handle Course Create / Update
   const handleSaveCourse = async (e) => {
     e.preventDefault();
-    setIsSavingCourse(true);
     setCourseFormError('');
+
+    // Validasi rentang waktu kursus
+    if (courseForm.startDate && courseForm.endDate && new Date(courseForm.startDate) > new Date(courseForm.endDate)) {
+      setCourseFormError('Tanggal mulai tidak boleh lebih akhir daripada tanggal selesai kursus.');
+      return;
+    }
+
+    setIsSavingCourse(true);
 
     try {
       const url = editingCourseId
@@ -189,6 +242,8 @@ export default function TeacherDashboardPage() {
         level: 'pemula',
         thumbnailUrl: '',
         status: 'draft',
+        startDate: '',
+        endDate: '',
       });
       await refreshData();
     } catch (err) {
@@ -334,18 +389,7 @@ export default function TeacherDashboardPage() {
             <Button
               variant="cta"
               size="md"
-              onClick={() => {
-                setEditingCourseId(null);
-                setCourseForm({
-                  title: '',
-                  description: '',
-                  categoryId: categories[0]?.id || '',
-                  level: 'pemula',
-                  thumbnailUrl: '',
-                  status: 'draft',
-                });
-                setShowCourseModal(true);
-              }}
+              onClick={() => handleOpenCourseModal()}
               className="shadow-sm"
             >
               <Plus className="w-4 h-4 mr-2" />
@@ -400,10 +444,7 @@ export default function TeacherDashboardPage() {
                 </p>
                 <Button
                   variant="primary"
-                  onClick={() => {
-                    setEditingCourseId(null);
-                    setShowCourseModal(true);
-                  }}
+                  onClick={() => handleOpenCourseModal()}
                 >
                   Buat Kursus Pertama
                 </Button>
@@ -454,18 +495,7 @@ export default function TeacherDashboardPage() {
 
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => {
-                            setEditingCourseId(course.id);
-                            setCourseForm({
-                              title: course.title,
-                              description: course.description,
-                              categoryId: course.category_id,
-                              level: course.level,
-                              thumbnailUrl: course.thumbnail_url || '',
-                              status: course.status,
-                            });
-                            setShowCourseModal(true);
-                          }}
+                          onClick={() => handleOpenCourseModal(course)}
                           className="p-1.5 text-slate-600 hover:text-primary rounded-lg hover:bg-slate-100 cursor-pointer"
                           title="Edit Kursus"
                         >
@@ -667,19 +697,31 @@ export default function TeacherDashboardPage() {
 
       {/* MODAL BUAT / EDIT KURSUS */}
       {showCourseModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
-            <h3 className="font-extrabold text-xl text-slate-800">
-              {editingCourseId ? 'Edit Kursus' : 'Buat Kursus Baru'}
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl my-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Header Modal */}
+            <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+              <h3 className="font-extrabold text-xl text-slate-800">
+                {editingCourseId ? 'Edit Kursus' : 'Buat Kursus Baru'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCourseModal(false)}
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 transition-colors"
+                title="Tutup"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            {courseFormError && (
-              <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
-                {courseFormError}
-              </div>
-            )}
+            {/* Scrollable Form Body */}
+            <form id="courseFormTeacher" onSubmit={handleSaveCourse} className="p-6 overflow-y-auto space-y-4 overscroll-contain flex-1">
+              {courseFormError && (
+                <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
+                  {courseFormError}
+                </div>
+              )}
 
-            <form onSubmit={handleSaveCourse} className="space-y-4">
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                   Judul Kursus
@@ -744,6 +786,38 @@ export default function TeacherDashboardPage() {
                 </div>
               </div>
 
+              {/* RENTANG WAKTU KURSUS (OPSIONAL) */}
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                    <Calendar className="w-4 h-4 text-primary" />
+                    <span>Rentang Waktu Kursus (Opsional)</span>
+                  </span>
+                  <span className="text-[11px] text-slate-400">Kosongkan jika Lifetime Access</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-500 mb-1">Tanggal Mulai</label>
+                    <input
+                      type="date"
+                      value={courseForm.startDate}
+                      onChange={(e) => setCourseForm({ ...courseForm, startDate: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-semibold text-slate-500 mb-1">Tanggal Selesai</label>
+                    <input
+                      type="date"
+                      value={courseForm.endDate}
+                      onChange={(e) => setCourseForm({ ...courseForm, endDate: e.target.value })}
+                      className="w-full p-2.5 bg-white border border-slate-300 rounded-xl text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                   URL Gambar Thumbnail (Opsional)
@@ -770,42 +844,56 @@ export default function TeacherDashboardPage() {
                   className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm"
                 />
               </div>
-
-              <div className="flex justify-end gap-3 pt-3">
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowCourseModal(false)}
-                >
-                  Batal
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  isLoading={isSavingCourse}
-                >
-                  Simpan Kursus
-                </Button>
-              </div>
             </form>
+
+            {/* Sticky Action Footer */}
+            <div className="p-4 sm:px-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
+              <Button
+                variant="secondary"
+                onClick={() => setShowCourseModal(false)}
+              >
+                Batal
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                form="courseFormTeacher"
+                isLoading={isSavingCourse}
+              >
+                Simpan Kursus
+              </Button>
+            </div>
           </div>
         </div>
       )}
 
       {/* MODAL TAMBAH / EDIT MATERI (BR-04) */}
       {showMaterialModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-6 shadow-2xl">
-            <h3 className="font-extrabold text-xl text-slate-800">
-              {editingMaterialId ? 'Edit Materi' : 'Tambah Materi Baru'}
-            </h3>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] flex flex-col shadow-2xl my-auto overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Header Modal */}
+            <div className="p-6 pb-4 border-b border-slate-100 flex items-center justify-between shrink-0">
+              <h3 className="font-extrabold text-xl text-slate-800">
+                {editingMaterialId ? 'Edit Materi' : 'Tambah Materi Baru'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowMaterialModal(false)}
+                className="text-slate-400 hover:text-slate-600 p-1.5 rounded-xl hover:bg-slate-100 transition-colors"
+                title="Tutup"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-            {materialFormError && (
-              <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
-                {materialFormError}
-              </div>
-            )}
+            {/* Scrollable Form Body */}
+            <form id="materialFormTeacher" onSubmit={handleSaveMaterial} className="p-6 overflow-y-auto space-y-4 overscroll-contain flex-1">
+              {materialFormError && (
+                <div className="p-3 rounded-xl bg-red-50 text-danger text-xs font-semibold">
+                  {materialFormError}
+                </div>
+              )}
 
-            <form onSubmit={handleSaveMaterial} className="space-y-4">
               <div className="grid grid-cols-4 gap-3">
                 <div className="col-span-1">
                   <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
@@ -848,23 +936,25 @@ export default function TeacherDashboardPage() {
                   className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-sm font-mono leading-relaxed"
                 />
               </div>
-
-              <div className="flex justify-end gap-3 pt-3">
-                <Button
-                  variant="secondary"
-                  onClick={() => setShowMaterialModal(false)}
-                >
-                  Batal
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  isLoading={isSavingMaterial}
-                >
-                  Simpan Materi
-                </Button>
-              </div>
             </form>
+
+            {/* Sticky Action Footer */}
+            <div className="p-4 sm:px-6 bg-slate-50 border-t border-slate-100 flex justify-end gap-3 shrink-0 rounded-b-3xl">
+              <Button
+                variant="secondary"
+                onClick={() => setShowMaterialModal(false)}
+              >
+                Batal
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                form="materialFormTeacher"
+                isLoading={isSavingMaterial}
+              >
+                Simpan Materi
+              </Button>
+            </div>
           </div>
         </div>
       )}

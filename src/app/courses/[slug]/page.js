@@ -8,6 +8,7 @@ import Footer from '@/components/common/Footer';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 import ProgressBar from '@/components/ui/ProgressBar';
+import ContactTeacherModal from '@/components/course/ContactTeacherModal';
 import {
   Users,
   BookOpen,
@@ -18,6 +19,8 @@ import {
   Award,
   Sparkles,
   AlertCircle,
+  Mail,
+  Calendar,
 } from 'lucide-react';
 
 export default function CourseDetailPage() {
@@ -30,6 +33,7 @@ export default function CourseDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [enrollError, setEnrollError] = useState('');
+  const [showContactModal, setShowContactModal] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -124,6 +128,10 @@ export default function CourseDetailPage() {
   const isEnrolled = enrollment && enrollment.is_enrolled;
   const isTeacherOwner = currentUser && currentUser.role === 'teacher' && course.teacher_id === currentUser.id;
 
+  const completedSet = new Set(enrollment?.completed_material_ids || []);
+  const nextMat = materials.find((m) => !completedSet.has(m.id));
+  const nextOrderNumber = nextMat ? nextMat.order_number : (materials[0]?.order_number || 1);
+
   return (
     <div className="min-h-screen flex flex-col bg-page">
       <Navbar />
@@ -149,6 +157,18 @@ export default function CourseDetailPage() {
                   <Badge variant="category">
                     {course.category_name}
                   </Badge>
+                  {course.start_date && course.end_date ? (
+                    <span className="px-3 py-1 bg-slate-900/60 border border-teal-300/30 rounded-full text-xs font-semibold text-teal-200 flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                      <span>
+                        {new Date(course.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })} - {new Date(course.end_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                      </span>
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 bg-slate-900/60 border border-teal-300/30 rounded-full text-xs font-semibold text-teal-200">
+                      Akses Selamanya
+                    </span>
+                  )}
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
@@ -172,14 +192,27 @@ export default function CourseDetailPage() {
                 </div>
 
                 {/* Pengajar */}
-                <div className="flex items-center gap-3 pt-4 border-t border-teal-800/80">
-                  <div className="w-11 h-11 rounded-full bg-teal-800 text-teal-100 flex items-center justify-center font-bold text-lg border-2 border-teal-600">
-                    {course.teacher_name ? course.teacher_name.charAt(0) : 'P'}
+                <div className="flex items-center justify-between gap-4 pt-4 border-t border-teal-800/80 flex-wrap">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-full bg-teal-800 text-teal-100 flex items-center justify-center font-bold text-lg border-2 border-teal-600">
+                      {course.teacher_name ? course.teacher_name.charAt(0) : 'P'}
+                    </div>
+                    <div>
+                      <div className="text-xs text-teal-300">Pengajar Kursus:</div>
+                      <div className="font-bold text-white text-base">{course.teacher_name}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-xs text-teal-300">Pengajar Kursus:</div>
-                    <div className="font-bold text-white text-base">{course.teacher_name}</div>
-                  </div>
+
+                  {!isTeacherOwner && (
+                    <button
+                      type="button"
+                      onClick={() => setShowContactModal(true)}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-800/80 hover:bg-teal-700 text-teal-100 hover:text-white border border-teal-600/70 font-bold text-xs transition-colors cursor-pointer shadow-xs"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-accent" />
+                      <span>Hubungi Pengajar</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -210,11 +243,11 @@ export default function CourseDetailPage() {
                       </div>
 
                       <Link
-                        href={`/learn/${slug}/1`}
+                        href={`/learn/${slug}/${nextOrderNumber}`}
                         className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all shadow-md text-base"
                       >
                         <PlayCircle className="w-5 h-5" />
-                        <span>Lanjutkan Belajar</span>
+                        <span>{enrollment.progress_percentage === 100 ? 'Ulas Materi' : 'Lanjutkan Belajar'}</span>
                       </Link>
                     </div>
                   ) : isTeacherOwner ? (
@@ -227,6 +260,18 @@ export default function CourseDetailPage() {
                         className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all text-base"
                       >
                         Kelola Kursus Ini
+                      </Link>
+                    </div>
+                  ) : currentUser?.role === 'teacher' ? (
+                    <div className="space-y-4">
+                      <div className="p-4 rounded-xl bg-slate-100 border border-slate-200 text-slate-700 text-xs font-semibold">
+                        Anda sedang masuk dengan akun Pengajar. Pendaftaran kursus hanya berlaku untuk akun Siswa.
+                      </div>
+                      <Link
+                        href="/dashboard/teacher"
+                        className="flex items-center justify-center gap-2 w-full py-3.5 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl transition-all text-base"
+                      >
+                        Buka Dashboard Pengajar
                       </Link>
                     </div>
                   ) : (
@@ -245,15 +290,21 @@ export default function CourseDetailPage() {
                         </div>
                       )}
 
-                      <Button
-                        variant="cta"
-                        size="lg"
-                        onClick={handleEnroll}
-                        isLoading={isEnrolling}
-                        className="w-full text-base font-bold shadow-md"
-                      >
-                        Ikuti Kursus Sekarang
-                      </Button>
+                      {materials.length === 0 ? (
+                        <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs text-center font-medium">
+                          Materi kursus sedang dipersiapkan oleh pengajar. Pendaftaran akan segera dibuka.
+                        </div>
+                      ) : (
+                        <Button
+                          variant="cta"
+                          size="lg"
+                          onClick={handleEnroll}
+                          isLoading={isEnrolling}
+                          className="w-full text-base font-bold shadow-md"
+                        >
+                          Ikuti Kursus Sekarang
+                        </Button>
+                      )}
 
                       <div className="space-y-2 pt-2 text-xs text-slate-500">
                         <div className="flex items-center gap-2">
@@ -289,14 +340,25 @@ export default function CourseDetailPage() {
                 </div>
 
                 {course.teacher_bio && (
-                  <div className="mt-6 pt-6 border-t border-slate-100 flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-2xl bg-teal-100 text-primary flex items-center justify-center font-bold text-xl shrink-0">
-                      {course.teacher_name ? course.teacher_name.charAt(0) : 'P'}
+                  <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-teal-100 text-primary flex items-center justify-center font-bold text-xl shrink-0">
+                        {course.teacher_name ? course.teacher_name.charAt(0) : 'P'}
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-800 text-base">{course.teacher_name}</h4>
+                        <p className="text-slate-600 text-sm mt-1">{course.teacher_bio}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="font-bold text-slate-800 text-base">{course.teacher_name}</h4>
-                      <p className="text-slate-600 text-sm mt-1">{course.teacher_bio}</p>
-                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setShowContactModal(true)}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-primary rounded-xl text-xs font-bold transition-colors shrink-0 border border-slate-200 cursor-pointer"
+                    >
+                      <Mail className="w-4 h-4 text-primary" />
+                      <span>Hubungi Pengajar</span>
+                    </button>
                   </div>
                 )}
               </div>
@@ -400,6 +462,17 @@ export default function CourseDetailPage() {
           </div>
         </section>
       </main>
+
+      {/* MODAL DIALOG HUBUNGI PENGAJAR */}
+      {course && (
+        <ContactTeacherModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          teacherName={course.teacher_name}
+          teacherEmail={course.teacher_email}
+          courseTitle={course.title}
+        />
+      )}
 
       <Footer />
     </div>

@@ -28,6 +28,8 @@ export default function LearnRoomPage() {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [commentError, setCommentError] = useState('');
 
   // Diskusi form state
   const [commentText, setCommentText] = useState('');
@@ -39,6 +41,18 @@ export default function LearnRoomPage() {
   const [isMarkingComplete, setIsMarkingComplete] = useState(false);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [earnedCertCode, setEarnedCertCode] = useState(null);
+
+  // Kunci scroll halaman belakang saat modal sertifikat terbuka
+  useEffect(() => {
+    if (showCertificateModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showCertificateModal]);
 
   const fetchMaterial = async () => {
     try {
@@ -92,6 +106,7 @@ export default function LearnRoomPage() {
 
   const handleMarkComplete = async () => {
     setIsMarkingComplete(true);
+    setActionError('');
     try {
       const res = await fetch(`/api/learn/${courseSlug}/${orderNumber}/complete`, {
         method: 'POST',
@@ -117,9 +132,12 @@ export default function LearnRoomPage() {
           // Beralih ke materi selanjutnya
           router.push(`/learn/${courseSlug}/${data.nextMaterial.order_number}`);
         }
+      } else {
+        setActionError(resJson.error || 'Gagal menandai materi selesai.');
       }
     } catch (err) {
       console.error('Complete error:', err);
+      setActionError('Terjadi gangguan jaringan saat menandai materi selesai.');
     } finally {
       setIsMarkingComplete(false);
     }
@@ -130,12 +148,14 @@ export default function LearnRoomPage() {
     if (!text.trim()) return;
 
     setIsSubmittingComment(true);
+    setCommentError('');
     try {
       const res = await fetch(`/api/learn/${courseSlug}/${orderNumber}/discussions`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content: text, parentId }),
       });
+      const resJson = await res.json();
 
       if (res.ok) {
         if (parentId) {
@@ -145,9 +165,12 @@ export default function LearnRoomPage() {
           setCommentText('');
         }
         await fetchMaterial();
+      } else {
+        setCommentError(resJson.error || 'Gagal mengirim pesan diskusi.');
       }
     } catch (err) {
       console.error('Discussion post error:', err);
+      setCommentError('Terjadi gangguan jaringan saat mengirim pesan diskusi.');
     } finally {
       setIsSubmittingComment(false);
     }
@@ -354,6 +377,12 @@ export default function LearnRoomPage() {
                 {renderFormattedContent(material.content)}
               </div>
 
+              {actionError && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-danger text-xs font-semibold">
+                  {actionError}
+                </div>
+              )}
+
               {/* Bar Navigasi & Aksi Materi */}
               <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
@@ -411,6 +440,11 @@ export default function LearnRoomPage() {
               </div>
 
               {/* Form Tulis Komentar Utama */}
+              {commentError && (
+                <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-danger text-xs font-semibold">
+                  {commentError}
+                </div>
+              )}
               <div className="space-y-3">
                 <textarea
                   rows={3}
@@ -549,8 +583,8 @@ export default function LearnRoomPage() {
 
       {/* POPUP MODAL SELAMAT KELULUSAN 100% */}
       {showCertificateModal && earnedCertCode && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl border-4 border-accent">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl border-4 border-accent my-auto">
             <div className="w-20 h-20 rounded-full bg-amber-100 text-accent flex items-center justify-center mx-auto shadow-md">
               <Award className="w-10 h-10" />
             </div>

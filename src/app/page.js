@@ -305,7 +305,7 @@ export default function HomePage() {
 
                           <div className="space-y-2 pt-0.5">
                             <Link
-                              href={`/learn/${userCourses[0].slug}/1`}
+                              href={`/learn/${userCourses[0].slug}/${userCourses[0].next_order || 1}`}
                               className="flex items-center justify-center gap-2 w-full p-3 rounded-xl bg-primary hover:bg-primary-dark text-white font-bold text-sm shadow-sm transition-all group"
                             >
                               <PlayCircle className="w-4 h-4" />

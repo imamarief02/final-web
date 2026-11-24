@@ -51,7 +51,10 @@ export default function Navbar() {
   const navItems = [
     { label: 'Beranda', href: '/', isActive: pathname === '/' },
     { label: 'Katalog Kursus', href: '/courses', isActive: pathname.startsWith('/courses') },
-    ...(user ? [{ label: 'Dashboard', href: '/dashboard', isActive: pathname.startsWith('/dashboard') || pathname.startsWith('/learn') }] : []),
+    ...(user ? [
+      { label: 'Dashboard', href: '/dashboard', isActive: pathname.startsWith('/dashboard') || pathname.startsWith('/learn') },
+      { label: 'Profil Saya', href: '/profile', isActive: pathname === '/profile' },
+    ] : []),
   ];
 
   return (
@@ -96,12 +99,12 @@ export default function Navbar() {
               <>
                 {user ? (
                   <div className="flex items-center gap-3">
-                    <div className="text-right select-none">
+                    <Link href="/profile" className="text-right select-none hover:opacity-80 transition-opacity">
                       <div className="text-sm font-bold text-slate-800 leading-tight">
                         {user.name}
                       </div>
                       <div className="text-xs text-slate-500 capitalize">{roleLabels[user.role]}</div>
-                    </div>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="px-3.5 py-1.5 rounded-xl bg-red-50 hover:bg-red-100 text-danger border border-red-200 text-xs font-bold transition-all cursor-pointer shadow-xs"
