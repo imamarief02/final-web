@@ -119,7 +119,21 @@ export default function TeacherDashboardPage() {
         }
 
         const authData = await authRes.json();
-        if (isMounted) setUser(authData.user);
+        const currentUser = authData.user;
+
+        // Route Guard: Pastikan hanya peran guru atau admin yang dapat mengakses
+        if (currentUser?.role !== 'teacher' && currentUser?.role !== 'admin') {
+          router.replace('/dashboard');
+          return;
+        }
+
+        // Jika pengajar belum disetujui (pending atau rejected), arahkan ke profil untuk melihat status peninjauan
+        if (currentUser?.role === 'teacher' && currentUser?.teacher_status !== 'approved') {
+          router.replace('/profile');
+          return;
+        }
+
+        if (isMounted) setUser(currentUser);
 
         if (coursesRes.ok) {
           const cData = await coursesRes.json();

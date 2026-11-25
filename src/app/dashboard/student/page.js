@@ -14,7 +14,6 @@ import {
   CheckCircle2,
   PlayCircle,
   Clock,
-  Sparkles,
   ArrowRight,
 } from 'lucide-react';
 
@@ -38,7 +37,15 @@ export default function StudentDashboardPage() {
         }
 
         const authData = await authRes.json();
-        setUser(authData.user);
+        const currentUser = authData.user;
+
+        // Route Guard: Admin dialihkan ke dashboard admin
+        if (currentUser?.role === 'admin') {
+          router.replace('/dashboard/admin');
+          return;
+        }
+
+        setUser(currentUser);
 
         if (coursesRes.ok) {
           const coursesData = await coursesRes.json();
@@ -78,8 +85,7 @@ export default function StudentDashboardPage() {
         {/* Welcome Greeting Banner */}
         <div className="bg-linear-to-r from-primary to-primary-dark rounded-3xl p-6 sm:p-10 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-teal-800/80 text-teal-200 text-xs font-bold">
-              <Sparkles className="w-3.5 h-3.5 text-accent" />
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-teal-800/80 text-teal-200 text-xs font-bold">
               <span>Ruang Belajar Siswa</span>
             </div>
             <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
