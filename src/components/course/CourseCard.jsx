@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Badge from '../ui/Badge';
 import ContactTeacherModal from './ContactTeacherModal';
 import { Users, BookOpen, ArrowRight, Mail, Calendar, PlayCircle, CheckCircle2, Settings } from 'lucide-react';
@@ -39,11 +40,13 @@ export default function CourseCard({ course }) {
     <div className="group bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-xs hover:shadow-xl hover:border-teal-300 transition-all duration-300 flex flex-col h-full">
       {/* THUMBNAIL CONTAINER */}
       <div className="relative aspect-video w-full overflow-hidden bg-slate-100">
-        <img
+        <Image
           src={thumbnail_url || fallbackImage}
           alt={title}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-          loading="lazy"
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+          unoptimized={Boolean(thumbnail_url && !thumbnail_url.startsWith('/') && !thumbnail_url.includes('images.unsplash.com'))}
         />
 
         {/* Level & Category Badges */}

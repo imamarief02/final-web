@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/common/Navbar';
 import Footer from '@/components/common/Footer';
 import Button from '@/components/ui/Button';
@@ -220,11 +221,14 @@ export default function CourseDetailPage() {
               <div className="lg:col-span-4">
                 <div className="bg-white text-slate-800 rounded-2xl p-6 sm:p-8 shadow-md border border-slate-300/80 space-y-6">
                   {course.thumbnail_url && (
-                    <div className="aspect-video rounded-2xl overflow-hidden bg-slate-100 -mt-2">
-                      <img
+                    <div className="relative aspect-video rounded-2xl overflow-hidden bg-slate-100 -mt-2">
+                      <Image
                         src={course.thumbnail_url}
                         alt={course.title}
-                        className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 380px"
+                        className="object-cover"
+                        unoptimized={Boolean(course.thumbnail_url && !course.thumbnail_url.startsWith('/') && !course.thumbnail_url.includes('images.unsplash.com'))}
                       />
                     </div>
                   )}

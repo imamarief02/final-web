@@ -12,23 +12,29 @@ function CoursesContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  const urlQ = searchParams.get('q') || '';
+  const urlCategory = searchParams.get('category') || '';
+  const urlLevel = searchParams.get('level') || '';
+
   const [courses, setCourses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [q, setQ] = useState(searchParams.get('q') || '');
-  const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || '');
-  const [selectedLevel, setSelectedLevel] = useState(searchParams.get('level') || '');
+  const [q, setQ] = useState(urlQ);
+  const [selectedCategory, setSelectedCategory] = useState(urlCategory);
+  const [selectedLevel, setSelectedLevel] = useState(urlLevel);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Sinkronkan state lokal ketika parameter URL berubah (misal klik kategori di footer atau beranda)
-  useEffect(() => {
-    const urlQ = searchParams.get('q') || '';
-    const urlCategory = searchParams.get('category') || '';
-    const urlLevel = searchParams.get('level') || '';
-
+  // Sinkronkan state lokal ketika parameter URL berubah tanpa memicu cascading render effect
+  const [prevParams, setPrevParams] = useState({ urlQ, urlCategory, urlLevel });
+  if (
+    prevParams.urlQ !== urlQ ||
+    prevParams.urlCategory !== urlCategory ||
+    prevParams.urlLevel !== urlLevel
+  ) {
+    setPrevParams({ urlQ, urlCategory, urlLevel });
     setQ(urlQ);
     setSelectedCategory(urlCategory);
     setSelectedLevel(urlLevel);
-  }, [searchParams]);
+  }
 
   // Ambil daftar kategori sekali di awal
   useEffect(() => {
