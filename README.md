@@ -2,6 +2,9 @@
 
 Platform kursus online berbasis web yang dibangun dengan Next.js App Router, Tailwind CSS, dan PostgreSQL (raw SQL tanpa ORM).
 
+### Filosofi Penamaan
+Nama **KursusDeh** terinspirasi dari partikel percakapan sehari-hari *"deh"* yang akrab dan bernada mengajak (*"Coba belajar ini deh"*, *"Mulai mi deh"*). Platform ini dirancang untuk mematahkan kesan bahwa belajar pemrograman dan keahlian baru itu kaku atau menakutkan bagi pemula. Melalui alur belajar langkah demi langkah yang terstruktur, KursusDeh hadir sebagai ruang belajar yang santai, bersahabat, dan mudah diikuti oleh siapa saja.
+
 ## Fitur Utama
 
 ### Siswa (Student)
