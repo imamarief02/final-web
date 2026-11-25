@@ -7,7 +7,6 @@ VALUES
   (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL, NOW() - INTERVAL '3 days'),
   (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
   (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL),
-  (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
   (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL),
   (11, 'Rian Pratama', 'rian@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Bisnis, Konsultan Manajemen & Karir Profesional lebih dari 10 tahun', NULL, NOW()),
   (12, 'Fajar Ramadhan', 'fajar@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Data Scientist, Machine Learning Engineer, dan Konsultan Analisis Data.', NULL, NOW()),
