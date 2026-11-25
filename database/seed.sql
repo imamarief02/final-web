@@ -3,21 +3,25 @@
 INSERT INTO users (id, name, email, password_hash, role, teacher_status, bio, avatar_url, approved_at)
 VALUES 
   (1, 'Admin Pusat KursusDeh', 'admin@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'admin', NULL, 'Administrator Sistem KursusDeh', NULL, NULL),
-  (2, 'Budi Santoso, S.Kom', 'budi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL, NOW() - INTERVAL '3 days'),
-  (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'pending', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL, NULL),
+  (2, 'Budi Santoso', 'budi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Web Developer dan Pengajar berpengalaman lebih dari 8 tahun.', NULL, NOW() - INTERVAL '3 days'),
+  (3, 'Siti Rahmawati', 'siti@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Spesialis UI/UX Design dan riset interaksi manusia-komputer.', NULL, NOW() - INTERVAL '3 days'),
   (4, 'Andi Pratama', 'andi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
   (5, 'Dewi Lestari', 'dewi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL),
   (8, 'Andi Pratama (Akun Siswa)', 'student@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pelajar yang antusias mempelajari teknologi web baru.', NULL, NULL),
-  (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL)
+  (9, 'Rudi Hidayat', 'rudi@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'student', NULL, 'Pemula yang baru memulai belajar coding.', NULL, NULL),
+  (11, 'Rian Pratama', 'rian@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Bisnis, Konsultan Manajemen & Karir Profesional lebih dari 10 tahun', NULL, NOW()),
+  (12, 'Fajar Ramadhan', 'fajar@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Praktisi Data Scientist, Machine Learning Engineer, dan Konsultan Analisis Data.', NULL, NOW()),
+  (13, 'Sarah Wijaya', 'sarah@kursusdeh.com', '$2b$10$hhtW/Xihn16kfjR0k41ty.bV7fwDRGpupmIbLRwJS79V9AlgHShxe', 'teacher', 'approved', 'Instruktur Bahasa Asing bersertifikasi TEFL dengan pengalaman mengajar komunikasi profesional lebih dari 7 tahun.', NULL, NOW())
 ON CONFLICT (id) DO UPDATE SET 
   name = EXCLUDED.name,
   email = EXCLUDED.email,
   password_hash = EXCLUDED.password_hash,
   role = EXCLUDED.role,
   teacher_status = EXCLUDED.teacher_status,
+  bio = EXCLUDED.bio,
   approved_at = EXCLUDED.approved_at;
 
-ALTER SEQUENCE users_id_seq RESTART WITH 10;
+ALTER SEQUENCE users_id_seq RESTART WITH 14;
 
 -- 2. Kategori Kursus (Categories)
 INSERT INTO categories (id, name, slug, description)
@@ -39,10 +43,13 @@ INSERT INTO courses (id, teacher_id, category_id, title, slug, description, thum
 VALUES 
   (1, 2, 1, 'Dasar-Dasar HTML & CSS untuk Pemula', 'dasar-html-css-pemula', 'Kursus ramah pemula untuk membangun fondasi web statis pertama Anda menggunakan tag HTML semantik dan styling CSS modern.', '/images/courses/dasardasarhtlmcss.jpg', 'pemula', 'published', NULL, NULL),
   (2, 2, 1, 'Mastering Tailwind CSS Modern', 'mastering-tailwind-css', 'Pelajari cara cepat membuat antarmuka web responsif dan elegan dengan utility-first styling Tailwind CSS.', '/images/courses/tailwindcss.jpg', 'menengah', 'published', '2026-12-01', '2026-12-31'),
-  (3, 2, 2, 'Dasar Riset UI/UX & Wireframing', 'dasar-ui-ux-wireframing', 'Pahami metode Human-Centered Design untuk merancang aplikasi yang intuitif, nyaman, dan disukai pengguna.', '/images/courses/uiuxwireframing.jpg', 'pemula', 'published', NULL, NULL),
-  (4, 2, 3, 'Analisis Data Python untuk Pemula', 'analisis-data-python', 'Panduan langkah demi langkah memproses tabel data, membersihkan data, dan membuat grafik visual menarik.', '/images/courses/analisisdatapython.jpg', 'pemula', 'published', '2026-12-10', '2027-01-15'),
-  (5, 2, 4, 'Percakapan Bahasa Inggris Sehari-hari', 'percakapan-bahasa-inggris', 'Tingkatkan rasa percaya diri berbicara bahasa Inggris dalam berbagai situasi umum dan profesional.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80', 'pemula', 'published', NULL, NULL)
+  (3, 3, 2, 'Dasar Riset UI/UX & Wireframing', 'dasar-ui-ux-wireframing', 'Pahami metode Human-Centered Design untuk merancang aplikasi yang intuitif, nyaman, dan disukai pengguna.', '/images/courses/uiuxwireframing.jpg', 'pemula', 'published', NULL, NULL),
+  (4, 12, 3, 'Analisis Data Python untuk Pemula', 'analisis-data-python', 'Panduan langkah demi langkah memproses tabel data, membersihkan data, dan membuat grafik visual menarik.', '/images/courses/analisisdatapython.jpg', 'pemula', 'published', '2026-12-10', '2027-01-15'),
+  (5, 13, 4, 'Percakapan Bahasa Inggris Sehari-hari', 'percakapan-bahasa-inggris', 'Tingkatkan rasa percaya diri berbicara bahasa Inggris dalam berbagai situasi umum dan profesional.', 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80', 'pemula', 'published', NULL, NULL),
+  (6, 11, 5, 'Dasar Manajemen Bisnis & Pengembangan Karir', 'manajemen-bisnis-dan-karir', 'Pelajari fondasi pengelolaan bisnis modern, penyusunan Business Model Canvas (BMC), manajemen arus kas dasar, serta strategi membangun karir profesional yang cemerlang.', 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80', 'pemula', 'published', NULL, NULL)
 ON CONFLICT (id) DO UPDATE SET 
+  teacher_id = EXCLUDED.teacher_id,
+  category_id = EXCLUDED.category_id,
   title = EXCLUDED.title,
   slug = EXCLUDED.slug,
   description = EXCLUDED.description,
@@ -52,7 +59,7 @@ ON CONFLICT (id) DO UPDATE SET
   start_date = EXCLUDED.start_date,
   end_date = EXCLUDED.end_date;
 
-ALTER SEQUENCE courses_id_seq RESTART WITH 6;
+ALTER SEQUENCE courses_id_seq RESTART WITH 7;
 
 -- 4. Materi Kursus Berurutan (Materials)
 INSERT INTO materials (id, course_id, title, content, order_number)
@@ -737,7 +744,104 @@ Hindari mengatakan "You are wrong". Gunakan teknik diplomatis:
 4. Menyimpulkan dan Tindak Lanjut:
 • "To sum up, our next action item is to finalize the design prototype by Friday." (Sebagai kesimpulan, tugas kita berikutnya adalah menyelesaikan purwarupa desain pada hari Jumat.)
 
-Congratulations! Anda telah mempelajari keterampilan percakapan esensial dari perkenalan sosial, situasi perjalanan praktis, hingga komunikasi profesional di lingkungan kerja.$TAG_19$, 3)
+Congratulations! Anda telah mempelajari keterampilan percakapan esensial dari perkenalan sosial, situasi perjalanan praktis, hingga komunikasi profesional di lingkungan kerja.$TAG_19$, 3),
+  (20, 6, 'Pengenalan Ekosistem Bisnis & Business Model Canvas (BMC)', $TAG_20$Selamat datang di bab pertama kursus Dasar Manajemen Bisnis & Pengembangan Karir! Di bab pembuka ini, kita akan mempelajari bagaimana sebuah gagasan usaha dirumuskan menjadi model bisnis yang solid dan teruji.
+
+1. Apa itu Bisnis Modern?
+Bisnis pada hakikatnya adalah proses menyelesaikan masalah orang lain secara menguntungkan dan berkelanjutan. Bisnis yang sukses tidak berawal dari produk yang rumit, melainkan dari pemahaman mendalam terhadap kebutuhan atau rasa sakit (pain point) pelanggan.
+
+Tiga pilar utama bisnis yang sehat:
+• Penciptaan Nilai (Value Creation): Menghadirkan solusi nyata yang dibutuhkan orang banyak.
+• Pengiriman Nilai (Value Delivery): Memastikan produk atau layanan sampai ke tangan pelanggan dengan kualitas konsisten.
+• Penangkapan Nilai (Value Capture): Menghasilkan pendapatan yang lebih besar daripada biaya operasional (profit).
+
+2. Memahami 9 Blok Business Model Canvas (BMC)
+Business Model Canvas (BMC) diciptakan oleh Alexander Osterwalder untuk memvisualisasikan seluruh komponen bisnis dalam satu lembar kerja ringkas:
+• Customer Segments: Siapa kelompok konsumen spesifik yang ingin Anda bantu?
+• Value Propositions: Solusi unik apa yang Anda tawarkan yang membedakan Anda dari kompetitor?
+• Channels: Melalui sarana apa Anda berkomunikasi dan mendistribusikan produk (misal: toko fisik, web e-commerce, media sosial)?
+• Customer Relationships: Bagaimana cara Anda menarik pelanggan baru dan mempertahankan pelanggan lama (retention)?
+• Revenue Streams: Dari mana saja uang masuk ke dalam kas bisnis Anda?
+• Key Resources: Aset apa saja yang wajib dimiliki (SDM, teknologi, modal, hak paten)?
+• Key Activities: Kegiatan operasional harian utama yang tidak boleh berhenti.
+• Key Partnerships: Pihak eksternal atau mitra strategis yang diajak bekerja sama (pemasok, logistik, payment gateway).
+• Cost Structure: Rincian seluruh pos pengeluaran terbesar untuk menjalankan model bisnis ini.
+
+3. Studi Kasus Singkat: Kedai Kopi Modern
+Bayangkan sebuah kedai kopi lokal yang ingin menyasar pekerja jarak jauh (remote worker):
+• Value Proposition: Kopi berkualitas dengan koneksi internet cepat, colokan di setiap meja, dan suasana tenang untuk fokus kerja.
+• Customer Segment: Freelancer, mahasiswa tingkat akhir, dan digital nomad usia 20-35 tahun.
+• Revenue Stream: Penjualan kopi, makanan ringan, dan penyewaan ruang meeting mini per jam.
+
+Tugas Refleksi: Amati satu bisnis lokal di sekitar tempat tinggal Anda. Tuliskan apa nilai tambah unik (Value Proposition) utama yang membuat pelanggan terus kembali membeli produk mereka!$TAG_20$, 1),
+  (21, 6, 'Manajemen Finansial Dasar & Pengelolaan Arus Kas (Cash Flow)', $TAG_21$Banyak bisnis pemula gulung tikar bukan karena mereka tidak memiliki penjualan, melainkan karena kehabisan uang tunai (cash flow insolvent). Di bab ini, kita akan membedah dasar-dasar keuangan bisnis yang wajib dipahami oleh setiap pemilik usaha dan profesional.
+
+1. Perbedaan Mendasar: Omset, Laba Kotor, dan Laba Bersih
+Sering kali pemula terjebak merasa bisnisnya sangat maju karena omsetnya besar, padahal setelah dihitung sebenarnya merugi.
+• Omset (Revenue / Penjualan): Total seluruh uang masuk dari transaksi penjualan sebelum dipotong biaya apa pun.
+• Harga Pokok Penjualan (HPP / COGS): Biaya langsung yang dikeluarkan untuk membuat atau membeli produk (misal: bahan baku kopi, susu, kemasan gelas).
+• Laba Kotor (Gross Profit): Omset - HPP.
+• Biaya Operasional (OPEX): Biaya sewa tempat, gaji karyawan, listrik, wifi, dan pemasaran.
+• Laba Bersih (Net Profit): Laba Kotor - Biaya Operasional - Pajak. Inilah keuntungan nyata yang menjadi hak bisnis Anda!
+
+2. Manajemen Arus Kas (Cash Flow is King)
+Arus kas mencatat kapan uang benar-benar masuk dan kapan uang keluar dari rekening bank bisnis Anda.
+• Arus Kas Positif: Uang yang masuk ke rekening lebih banyak daripada uang yang dibayarkan keluar.
+• Arus Kas Negatif: Uang keluar lebih cepat daripada uang masuk. Jika dibiarkan berlarut-larut, bisnis tidak akan mampu membayar tagihan dan gaji.
+
+Aturan Emas Mengelola Cash Flow:
+• Pisahkan rekening pribadi dengan rekening bisnis sejak hari pertama.
+• Tagih piutang konsumen secepat mungkin dan negosiasikan termin pembayaran ke vendor/pemasok secara bijak.
+• Selalu siapkan dana darurat operasional (runway cash) minimal setara dengan 3 hingga 6 bulan pengeluaran rutin.
+
+3. Strategi Penetapan Harga (Pricing Strategy)
+Ada tiga pendekatan umum dalam menentukan harga jual:
+• Cost-Plus Pricing: Menambahkan persentase margin keuntungan di atas biaya HPP (misal: HPP Rp20.000 + margin 50% = harga jual Rp30.000).
+• Competitor-Based Pricing: Menetapkan harga mendekati rata-rata pemain lain di pasar yang sama.
+• Value-Based Pricing: Menetapkan harga berdasarkan nilai dan manfaat emosional/finansial yang dirasakan pelanggan, bukan sekadar harga modal bahan.$TAG_21$, 2),
+  (22, 6, 'Strategi Perencanaan Karir, Networking & Personal Branding', $TAG_22$Karir yang sukses bukan sekadar hasil dari keberuntungan, melainkan hasil dari perencanaan yang terarah, peningkatan kompetensi (skill development), dan pembangunan reputasi profesional.
+
+1. Memetakan Keahlian Diri (Skill Matrix & T-Shaped Skills)
+Di pasar kerja modern, profesional yang paling dicari adalah mereka yang memiliki profil T-Shaped:
+• Garis Horizontal (Broad Knowledge): Memiliki pemahaman umum lintas disiplin (misal: paham dasar komunikasi, digital marketing, analitik data, dan cara kerja bisnis).
+• Garis Vertikal (Deep Expertise): Memiliki satu atau dua keahlian khusus yang sangat mendalam dan ahli di bidangnya (misal: mahir frontend development atau copywriting).
+
+2. Membangun Personal Branding di Era Digital
+Personal brand adalah apa yang orang lain katakan tentang keahlian dan integritas Anda saat Anda tidak berada di dalam ruangan.
+Langkah praktis membangun reputasi profesional:
+• Optimasi Profil LinkedIn: Gunakan foto profesional, tulis headline yang menjelaskan solusi yang bisa Anda berikan (contoh: "Web Developer | Membantu UMKM Go-Digital"), dan cantumkan pencapaian konkrit.
+• Dokumentasikan Proses Belajar (Build in Public): Bagikan studi kasus, proyek yang sedang Anda kerjakan, atau wawasan yang baru saja Anda pelajari di media sosial profesional.
+• Portofolio Nyata: Buktikan kemampuan Anda melalui karya nyata, sertifikat terverifikasi, atau kontribusi open-source.
+
+3. Seni Komunikasi & Networking
+• Networking bukan tentang membagikan kartu nama sebanyak-banyaknya, melainkan tentang membangun hubungan timbal balik yang tulus.
+• Selalu tanyakan: "Bagaimana saya bisa membantu proyek atau pekerjaan Anda saat ini?" sebelum meminta bantuan orang lain.$TAG_22$, 3),
+  (23, 6, 'Manajemen Waktu, Produktivitas, dan Eksekusi Target (SMART & OKR)', $TAG_23$Ide bisnis dan ambisi karir terbaik tidak akan bermakna tanpa kemampuan eksekusi yang konsisten. Bab terakhir ini akan membekali Anda dengan kerangka kerja produktivitas yang digunakan oleh perusahaan teknologi global seperti Google, Intel, dan Spotify.
+
+1. Menetapkan Target dengan SMART Goals & OKRs
+Banyak orang gagal mencapai target karena targetnya terlalu samar, misalnya "Saya ingin sukses tahun ini". Gunakan prinsip SMART:
+• Specific: Target harus jelas dan tidak bermakna ganda.
+• Measurable: Memiliki indikator angka yang dapat diukur.
+• Achievable: Realistis untuk dicapai dengan sumber daya yang ada.
+• Relevant: Sejalan dengan tujuan jangka panjang bisnis atau karir Anda.
+• Time-bound: Memiliki batas waktu (tenggat) yang tegas.
+
+Kerangka Kerja OKR (Objectives & Key Results):
+• Objective (Kualitatif): "Meningkatkan kualitas pelayanan pelanggan aplikasi."
+• Key Result 1 (Kuantitatif): Menurunkan waktu respon customer care dari 30 menit menjadi di bawah 5 menit.
+• Key Result 2 (Kuantitatif): Mencapai skor kepuasan pelanggan (CSAT) minimal 90% pada akhir kuartal.
+
+2. Manajemen Waktu: Matriks Eisenhower
+Kelompokkan tugas harian Anda ke dalam 4 kuadran:
+• Penting & Mendesak (Do First): Krisis yang harus segera diselesaikan hari ini.
+• Penting & Tidak Mendesak (Schedule): Inilah kunci kemajuan jangka panjang! Mencakup belajar skill baru, berolahraga, menyusun strategi bisnis, dan membangun networking. Jadwalkan waktu khusus di kalender Anda.
+• Tidak Penting & Mendesak (Delegate): Tugas administratif yang bisa didelegasikan atau diotomatisasi.
+• Tidak Penting & Tidak Mendesak (Eliminate): Scrolling media sosial tanpa tujuan, kebiasaan menunda-nunda.
+
+3. Membangun Resiliensi & Growth Mindset
+Dunia bisnis dan karir selalu berubah secara dinamis. Mereka yang terus bertahan dan menjadi pemimpin adalah mereka yang memandang kegagalan sebagai bahan evaluasi dan data pembelajaran, bukan sebagai akhir perjalanan.
+
+Selamat! Anda telah menuntaskan seluruh modul fundamental bisnis dan pengembangan karir ini. Terapkan wawasan ini secara nyata pada usaha rintisan atau perjalanan profesi Anda!$TAG_23$, 4)
 ON CONFLICT (id) DO UPDATE SET 
   title = EXCLUDED.title,
   content = EXCLUDED.content,
