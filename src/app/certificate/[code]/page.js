@@ -93,7 +93,7 @@ export default function CertificatePage() {
         <div className="relative bg-white border-8 border-double border-teal-800 rounded-3xl p-8 sm:p-14 shadow-2xl overflow-hidden print:border-4 print:shadow-none print:m-0">
           {/* Subtle Background Watermark */}
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-            <BookOpen className="w-[500px] h-[500px] text-teal-900" />
+            <BookOpen className="w-125 h-125 text-teal-900" />
           </div>
 
           <div className="relative z-10 text-center space-y-8">

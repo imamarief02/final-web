@@ -97,12 +97,12 @@ export default function CourseCard({ course }) {
       {/* KONTEN KARTU */}
       <div className="p-5 sm:p-6 flex flex-col flex-1">
         {/* Judul dengan Tinggi Tetap 2 Baris agar Semua Kartu Rata */}
-        <h3 className="font-extrabold text-lg text-text-main group-hover:text-primary transition-colors line-clamp-2 h-[3.25rem] flex items-start mb-2 leading-snug">
+        <h3 className="font-extrabold text-lg text-text-main group-hover:text-primary transition-colors line-clamp-2 h-13 flex items-start mb-2 leading-snug">
           {title}
         </h3>
         
         {/* Deskripsi dengan Tinggi Tetap 2 Baris */}
-        <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 h-[2.5rem] mb-4 leading-relaxed">
+        <p className="text-slate-600 text-xs sm:text-sm line-clamp-2 h-10 mb-4 leading-relaxed">
           {description}
         </p>
 
