@@ -103,6 +103,18 @@ export async function PUT(request) {
 
     const slug = slugify(name);
 
+    // Cek duplikasi nama atau slug pada kategori lain
+    const dupCheck = await query(
+      'SELECT id FROM categories WHERE (slug = $1 OR name = $2) AND id <> $3',
+      [slug, name.trim(), id]
+    );
+    if (dupCheck.rows.length > 0) {
+      return NextResponse.json(
+        { error: 'Kategori dengan nama atau slug ini sudah digunakan oleh kategori lain.' },
+        { status: 409 }
+      );
+    }
+
     const updateRes = await query(
       `UPDATE categories
        SET name = $1, slug = $2, description = $3

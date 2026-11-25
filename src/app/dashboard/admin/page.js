@@ -604,7 +604,7 @@ export default function AdminDashboardPage() {
                                 size="sm"
                                 variant="primary"
                                 onClick={() => handleTeacherAction(t.id, 'approved')}
-                                className="!bg-emerald-600 hover:!bg-emerald-700 text-white"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
                               >
                                 <CheckCircle2 className="w-4 h-4 mr-1" />
                                 <span>Setujui (Approve)</span>

@@ -12,7 +12,7 @@ export async function GET(request) {
     const teacherStatus = searchParams.get('status');
 
     let sql = `
-      SELECT id, name, email, role, teacher_status, bio, avatar_url, created_at
+      SELECT id, name, email, role, teacher_status, bio, avatar_url, approved_at, created_at
       FROM users
       WHERE role = 'teacher'
     `;
